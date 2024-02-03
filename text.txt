@@ -1,0 +1,26 @@
+2- Interface d’Accueil => Qui Contient un Menu comportant les onglets suivants :
+  → Gestion Utilisateur : si on clique là-dessus une liste déroulante contenant deux options :
+      o Ajouter Utilisateur
+      o Afficher Utilisateurs
+  Si on clique sur l’un des deux options la fenêtre de l’ajout ou d’affichage s’ouvre
+  → Gestion Personne : si on clique là-dessus une liste déroulante contenant deux options :
+      o Ajouter apprenant
+      o Afficher apprenants
+      o Ajouter professeur
+      o Afficher professeurs
+      o Ajouter responsable
+      o Afficher responsables
+  → Gestion des matières :
+      o Ajouter matière
+      o Afficher matières
+  → Gestion des salles :
+      o Ajouter salle
+      o Afficher salles
+  → Gestion des séances :
+      o Ajouter séance
+      o Afficher séances
+  → Un bouton de filtrage pour la méthode afficherSeanceProfesseur
+  → Un tableau pour lister toutes les séances, ce tableau contiendra 
+une colonne d’action ou on déposera deux boutons « supprimer » et « modifier » le
+premier supprimera la séance sélectionnée et le deuxième modifiera les informations
+de la séance

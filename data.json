@@ -1,0 +1,86 @@
+{
+  "utilisateurs": [
+    {
+      "login": "adam04",
+      "password": "123456",
+      "email": "jeniahadam@gmail.com"
+    },
+    {
+      "login": "med07",
+      "password": "789456",
+      "email": "med@gmail.com"
+    },
+    {
+      "login": "jeniah",
+      "password": "7500",
+      "email": "jeniah7500@gmail.com"
+    },
+    {
+      "login": "mosaab",
+      "password": "5550",
+      "email": "mosaab5550@gmail.com"
+    },
+    {
+      "login": "mohamed",
+      "password": "4444",
+      "email": "mohamed4444@gmail.com"
+    },
+    {
+      "login": "Yasser",
+      "password": "3333",
+      "email": "yasser3333@gmail.com"
+    }
+  ],
+  "seances": [
+    {
+      "idSeance": "fSeance",
+      "professeur": [
+        "adam",
+        "(1234)"
+      ],
+      "matiere": "fr1230",
+      "salle": "salleE",
+      "dateSeance": "24/06/2024"
+    },
+    {
+      "idSeance": "gSeance",
+      "professeur": [
+        "adam",
+        "(1234)"
+      ],
+      "matiere": "en500",
+      "salle": "salleJ",
+      "dateSeance": "25/06/2024"
+    },
+    {
+      "idSeance": "nSeance",
+      "professeur": [
+        "anas",
+        "(7600)"
+      ],
+      "matiere": "fr1230",
+      "salle": "salleH",
+      "dateSeance": "30/07/2024"
+    },
+    {
+      "idSeance": "mSeance",
+      "professeur": [
+        "anas",
+        "(7600)"
+      ],
+      "matiere": "fr1230",
+      "salle": "salleH",
+      "dateSeance": "23/05/2024"
+    },
+    {
+      "idSeance": "oneSeance",
+      "professeur": [
+        "adam",
+        "(1234)"
+      ],
+      "matiere": "fr1230",
+      "salle": "salleH",
+      "dateSeance": "23/05/2024"
+    }
+  ]
+}
