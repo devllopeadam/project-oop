@@ -34,53 +34,73 @@
   "seances": [
     {
       "idSeance": "fSeance",
-      "professeur": [
-        "adam",
-        "(1234)"
-      ],
+      "professeur": "1234",
       "matiere": "fr1230",
       "salle": "salleE",
       "dateSeance": "24/06/2024"
     },
     {
       "idSeance": "gSeance",
-      "professeur": [
-        "adam",
-        "(1234)"
-      ],
+      "professeur": "1234",
       "matiere": "en500",
       "salle": "salleJ",
       "dateSeance": "25/06/2024"
     },
     {
       "idSeance": "nSeance",
-      "professeur": [
-        "anas",
-        "(7600)"
-      ],
+      "professeur": "7600",
       "matiere": "fr1230",
       "salle": "salleH",
       "dateSeance": "30/07/2024"
     },
     {
       "idSeance": "mSeance",
-      "professeur": [
-        "anas",
-        "(7600)"
-      ],
+      "professeur": "7600",
       "matiere": "fr1230",
       "salle": "salleH",
       "dateSeance": "23/05/2024"
     },
     {
-      "idSeance": "oneSeance",
-      "professeur": [
-        "adam",
-        "(1234)"
-      ],
-      "matiere": "fr1230",
+      "idSeance": "secondSeance",
+      "professeur": "kooraforlife",
+      "matiere": "en500",
       "salle": "salleH",
-      "dateSeance": "23/05/2024"
+      "dateSeance": "20/25/2024"
+    }
+  ],
+  "professeurs": [
+    {
+      "nom": "jeniah",
+      "prenom": "adam",
+      "cin": "kb243538",
+      "filiere": "dev",
+      "matricule": "1234"
+    },
+    {
+      "nom": "mrabet",
+      "prenom": "anas",
+      "cin": "kb243348",
+      "filiere": "pc",
+      "matricule": "7600"
+    },
+    {
+      "nom": "mbape",
+      "prenom": "jeniah",
+      "cin": "123riyah",
+      "filiere": "ball",
+      "matricule": "kooraforlife"
+    }
+  ],
+  "matieres": [
+    {
+      "idMatiere": "fr1230",
+      "libelle": "pour la langue francaise",
+      "langue": "Francais"
+    },
+    {
+      "idMatiere": "en500",
+      "libelle": "english course",
+      "langue": "English"
     }
   ]
 }

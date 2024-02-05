@@ -20,12 +20,25 @@ class Matiere:
                 "langue": self.langue,
             }
         )
+        with open("./data.json", "r") as file:
+            data = json.load(file)
+
+            data["matieres"] = Matiere.matieres
+
+        with open("./data.json", "w") as file:
+            json.dump(data, file, indent=2)
 
     # to delete a specific matiere using the idMatiere
     def supprimerMatiere(idMatiere):
         for i in Matiere.matieres:
             if i["idMatiere"] == idMatiere:
                 Matiere.matieres.remove(i)
+        with open("./data.json", "r") as file:
+            data = json.load(file)
+        data["matieres"] = Matiere.matieres
+
+        with open("./data.json", "w") as file:
+            json.dump(data, file, indent=2)
 
     # to add a matiere to the matieres list
     @classmethod
@@ -40,6 +53,11 @@ class Matiere:
                 i["idMatiere"] = newIdMatiere
                 i["libelle"] = newLibelle
                 i["langue"] = newLangue
+            with open("./data.json", "r") as file:
+                data = json.load(file)
+            data["matieres"] = Matiere.matieres
+            with open("./data.json", "w") as file:
+                json.dump(data, file, indent=2)
 
     # the getters and the setters
 
@@ -283,11 +301,25 @@ class Professeur(Person):
                 "matricule": matricule,
             }
         )
+        with open("./data.json", "r") as file:
+            data = json.load(file)
+
+            data["professeurs"] = Professeur.professeurs
+
+        with open("./data.json", "w") as file:
+            json.dump(data, file, indent=2)
 
     def supprimerProfesseur(cin):
         for i in Professeur.professeurs:
             if i["cin"] == cin:
                 Professeur.professeurs.remove(i)
+
+        with open("./data.json", "r") as file:
+            data = json.load(file)
+        data["professeurs"] = Professeur.professeurs
+
+        with open("./data.json", "w") as file:
+            json.dump(data, file, indent=2)
 
     @classmethod
     def ajouterProfesseur(cls, nom, prenom, cin, filiere, matricule):
@@ -304,6 +336,11 @@ class Professeur(Person):
                 i["cin"] = newCin
                 i["filiere"] = newFiliere
                 i["matricule"] = newMatricule
+            with open("./data.json", "r") as file:
+                data = json.load(file)
+            data["professeurs"] = Professeur.professeurs
+            with open("./data.json", "w") as file:
+                json.dump(data, file, indent=2)
 
     @property
     def filiere(self):
@@ -324,6 +361,9 @@ class Professeur(Person):
 
 l = Professeur.ajouterProfesseur("jeniah", "adam", "kb243538", "dev", "1234")
 m = Professeur.ajouterProfesseur("mrabet", "anas", "kb243348", "pc", "7600")
+last = Professeur.ajouterProfesseur(
+    "mbape", "jeniah", "123riyah", "ball", "kooraforlife"
+)
 # print(l.matricule)
 
 
@@ -486,10 +526,13 @@ class Seance:
         self.__matiere = matiere
         self.__salle = salle
         self.__datSeance = dateSeance
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["seances"]
+            # print(ar)
         Seance.seances.append(
             {
                 "idSeance": idSeance,
-                "professeur": (professeur.prenom, f"({professeur.matricule})"),
+                "professeur": professeur.matricule,
                 "matiere": matiere.idMatiere,
                 "salle": salle.idSalle,
                 "dateSeance": dateSeance,
@@ -497,7 +540,6 @@ class Seance:
         )
         with open("./data.json", "r") as file:
             data = json.load(file)
-
             data["seances"] = Seance.seances
 
         with open("./data.json", "w") as file:
@@ -505,12 +547,15 @@ class Seance:
 
     # supprimer une seance
     def supprimerSeance(idSeance):
-        for i in Seance.seances:
-            if i["idSeance"] == idSeance:
-                Seance.seances.remove(i)
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["seances"]
+            for i in ar:
+                if i["idSeance"] == idSeance:
+                    ar.remove(i)
+
         with open("./data.json", "r") as file:
             data = json.load(file)
-        data["seances"] = Seance.seances
+        data["seances"] = ar
 
         with open("./data.json", "w") as file:
             json.dump(data, file, indent=2)
@@ -525,19 +570,19 @@ class Seance:
     def modifierSeance(
         cls, idSeance, newIdSeance, newProfesseur, newMatiere, newSalle, newDateSeance
     ):
-        for i in Seance.seances:
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["seances"]
+        for i in ar:
             if i["idSeance"] == idSeance:
                 i["idSeance"] = newIdSeance
-                i["professeur"] = newProfesseur.matricule
-                i["matiere"] = newMatiere.idMatiere
-                i["salle"] = newSalle.idSalle
+                i["professeur"] = newProfesseur["matricule"]
+                i["matiere"] = newMatiere["idMatiere"]
+                i["salle"] = newSalle["idSalle"]
                 i["dateSeance"] = newDateSeance
-        print(Seance.seances)
+
         with open("./data.json", "r") as file:
             data = json.load(file)
-
-            data["seances"] = Seance.seances
-
+            data["seances"] = ar
         with open("./data.json", "w") as file:
             json.dump(data, file, indent=2)
 
@@ -558,16 +603,14 @@ class Seance:
 
     @classmethod
     def afficherSalleDispo(cls, idSalle, date):
-        ids = [i["salle"] for i in cls.seances]
-        if idSalle in ids:
-            for i in cls.seances:
-                if i["salle"] == idSalle:
-                    if i["dateSeance"] != date:
-                        return True
-                    else:
-                        return False
+        all = []
+        for i in cls.seances:
+            if i["salle"] == idSalle:
+                all.append(i["dateSeance"])
+        if date in all:
+            return False
         else:
-            return "Aucunne seance de cette id salle"
+            return True
 
     @property
     def idSeance(self):
@@ -617,26 +660,9 @@ f = Seance("fSeance", l, matiereOne, saleOne, "24/06/2024")
 g = Seance("gSeance", l, matiereTwo, saleTwo, "25/06/2024")
 n = Seance("nSeance", m, matiereOne, saleThree, "30/07/2024")
 m = Seance("mSeance", m, matiereOne, saleThree, "23/05/2024")
-a = Seance("oneSeance", l, matiereOne, saleThree, "23/05/2024")
+scd = Seance.ajouterSeance("secondSeance", last, matiereTwo, saleThree, "20/25/2024")
 
-
-#  idSeance, newIdSeance, newProfesseur, newMatiere, newSalle, newDateSeance
-# Seance.modifierSeance("fSeance", "newSeance", l, matiereTwo, saleThree, "24/2/2024")
-
-
-# Seance.supprimerSeance("fSeance")
-
-#
-# print(Seance.seances)
-
-# print(Seance.afficherSeanceProfesseur("1234"))
-# print(Seance.afficherSeanceProfesseur("7600"))
-
-# print(Seance.afficherSalleDispo("salleE", "25/06/2024"))
-# print(Seance.afficherSalleDispo("salleE", "24/06/2024"))
-# print(Seance.afficherSalleDispo("salleJ", "25/06/2024"))
-# print(Seance.afficherSalleDispo("salleJ", "2/24/2024"))
-# print(Seance.afficherSalleDispo("salle>", "23/06/2024"))
+# lt = Seance.ajouterSeance("lstSeanct", l, matiereOne, saleThree, "05/02/2024")
 
 
 # Les interfaces graphique
@@ -798,6 +824,7 @@ class Home(ctk.CTk):
         self.create_treeview()
         self.get_data_from_json()
         self.create_action_panel()
+        self.create_filter_bar()
 
     def create_control_panel_frame(self):
         frame = ctk.CTkFrame(self, fg_color="white", corner_radius=0)
@@ -916,9 +943,9 @@ class Home(ctk.CTk):
         table.column("salle", anchor="center", width=100)
 
         table.heading("idSeance", text="Id Seance")
-        table.heading("professeur", text="Professeur")
-        table.heading("matiere", text="Matiere")
-        table.heading("salle", text="Salle")
+        table.heading("professeur", text="Professeur matricule")
+        table.heading("matiere", text="Matiere id")
+        table.heading("salle", text="Salle id")
         table.heading("dateSeance", text="Date Seance")
 
         table.pack(fill="both", expand=True)
@@ -940,14 +967,95 @@ class Home(ctk.CTk):
         value = value_entry_del.get()
         aridSeance = [i["idSeance"] for i in self.get_data_from_json()]
         if value in aridSeance:
-            # Seance.supprimerSeance(value)
             Seance.supprimerSeance(value)
+            error.place_forget()
             table.delete(*table.get_children())
             for i in self.get_data_from_json():
                 table.insert(parent="", index="end", values=list(i.values()))
-            error.place_forget()
         else:
             error.place(relx=0.5, y=110, anchor="center")
+
+    def modification(self):
+        final = []
+        aridSeance = [i["idSeance"] for i in self.get_data_from_json()]
+        pro = [i["professeur"] for i in self.get_data_from_json()]
+        mats = [i["matiere"] for i in self.get_data_from_json()]
+        sals = [i["salle"] for i in self.get_data_from_json()]
+        newId = value_entry_idSeance.get()
+        newPro = value_entry_professeur.get()
+        newMatiere = value_entry_matiere.get()
+        newSalle = value_entry_salle.get()
+        newDate = value_entry_date.get()
+
+        # newDate = value
+        if value_entry_mod.get() in aridSeance:
+            error_mod.place_forget()
+            # For the new id checking
+            if newId == "nouveau id" or newId == "" or newId in aridSeance:
+                error_id.place(relx=0.5, anchor="center", y=325)
+            else:
+                error_id.place_forget()
+                final.append(newId)
+            # For the new pro checking
+            if newPro == "nouveau matricule pro" or newPro == "" or newPro not in pro:
+                error_professeur.place(relx=0.5, anchor="center", y=380)
+            elif newPro in pro:
+                error_professeur.place_forget()
+                final.append(
+                    {
+                        "nom": "biba",
+                        "prenom": "khawa",
+                        "cin": "adlfk",
+                        "filiere": "adfas",
+                        "matricule": newPro,
+                    }
+                )
+
+            # For the new matiere checking
+
+            if (
+                newMatiere == "nouvelle matiere"
+                or newMatiere == ""
+                or newMatiere not in mats
+            ):
+                error_matiere.place(relx=0.5, anchor="center", y=439)
+            elif newMatiere in mats:
+                error_matiere.place_forget()
+                final.append(
+                    {
+                        "idMatiere": newMatiere,
+                        "libelle": "pour la langue francaise",
+                        "langue": "Francais",
+                    }
+                )
+
+            # For the new Salle
+
+            if newSalle == "nouvelle salle" or newSalle == "" or newSalle not in sals:
+                error_salle.place(relx=0.5, anchor="center", y=495)
+            elif newSalle in sals:
+                error_salle.place_forget()
+                final.append(
+                    {"idSalle": newSalle, "libelle": "libelle", "numero": "numero"}
+                )
+
+            # For the data and the afficher salle dispo function
+            state = Seance.afficherSalleDispo(newSalle, newDate)
+            if newDate == "nouvelle date" or newSalle == "" or state == False:
+                error_date.place(relx=0.5, anchor="center", y=550)
+            elif state == True:
+                error_date.place_forget()
+                final.append(newDate)
+
+            Seance.modifierSeance(
+                value_entry_mod.get(), final[0], final[1], final[2], final[3], final[4]
+            )
+            table.delete(*table.get_children())
+            for i in self.get_data_from_json():
+                table.insert(parent="", index="end", values=list(i.values()))
+
+        else:
+            error_mod.place(relx=0.5, y=260, anchor="center")
 
     def create_action_panel(self):
         # for the frame
@@ -966,7 +1074,7 @@ class Home(ctk.CTk):
             text_color="white",
             height=35,
             hover_color="#f53737",
-            command=self.get_data_entry_check,
+            command=lambda: self.get_data_entry_check(),
         )
         del_button.configure(cursor="hand2")
         del_button.pack(pady=20)
@@ -977,15 +1085,19 @@ class Home(ctk.CTk):
             placeholder_text="Entrer id seance",
             width=170,
             height=35,
-            font=(Home.font, 14),
+            font=(Home.font, 13),
             textvariable=value_entry_del,
         )
         entry_del.pack(pady=20)
+        entry_del.insert(ctk.END, "Entrer id seance")
         global error
         error = ctk.CTkLabel(
-            frame, text="idSeance not found", text_color="#FF0033", height=20
+            frame,
+            text="idSeance not found",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
         )
-        # error.place(relx=0.5, y=110, anchor="center")
         error.place_forget()
         # modification button
         modi_button = ctk.CTkButton(
@@ -996,10 +1108,182 @@ class Home(ctk.CTk):
             text_color="white",
             height=35,
             hover_color="#2ee28b",
+            command=self.modification,
         )
-        modi_button.pack(pady=20)
+        global value_entry_mod
+        value_entry_mod = ctk.StringVar()
 
-    def get_data_from_json(self):
+        entry_mod = ctk.CTkEntry(
+            frame,
+            placeholder_text="Entrer id seance",
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_mod,
+        )
+        global error_mod
+        error_mod = ctk.CTkLabel(
+            frame,
+            text="id not found",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+
+        modi_button.pack(pady=20)
+        error_mod.place_forget()
+        entry_mod.insert(ctk.END, "Entrer id seance")
+        entry_mod.pack(pady=20)
+
+        # start other entries for modifying the seance
+        # entry for new id
+        global value_entry_idSeance
+        value_entry_idSeance = ctk.StringVar()
+        global entry_idSeance
+        entry_idSeance = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_idSeance,
+        )
+        global error_id
+        error_id = ctk.CTkLabel(
+            frame,
+            text="id always exist",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+        error_id.place_forget()
+        entry_idSeance.insert(index=ctk.END, string="nouveau id")
+        entry_idSeance.pack(pady=10)
+        # entry for new professeur
+        global value_entry_professeur
+        value_entry_professeur = ctk.StringVar()
+        global entry_professeur
+        entry_professeur = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_professeur,
+        )
+        entry_professeur.insert(index=ctk.END, string="nouveau matricule pro")
+        global error_professeur
+        error_professeur = ctk.CTkLabel(
+            frame,
+            text="Professeur not found",
+            text_color="#FF0033",
+            height=15,
+            font=(Home.font, 11),
+        )
+        error_professeur.place_forget()
+        entry_professeur.pack(pady=10)
+
+        # entry for new matiere
+        global value_entry_matiere
+        value_entry_matiere = ctk.StringVar()
+        global entry_matiere
+        entry_matiere = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_matiere,
+        )
+        entry_matiere.insert(index=ctk.END, string="nouvelle matiere")
+        global error_matiere
+        error_matiere = ctk.CTkLabel(
+            frame,
+            text="Matiere not found",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+        error_matiere.place_forget()
+        entry_matiere.pack(pady=10)
+
+        # Entry for salle
+        global value_entry_salle
+        value_entry_salle = ctk.StringVar()
+        global entry_salle
+        entry_salle = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_salle,
+        )
+        entry_salle.insert(index=ctk.END, string="nouvelle salle")
+        global error_salle
+        error_salle = ctk.CTkLabel(
+            frame,
+            text="salle not found",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+        error_salle.place_forget()
+        entry_salle.pack(pady=10)
+
+        # entry for date
+        global value_entry_date
+        value_entry_date = ctk.StringVar()
+        global entry_date
+        entry_date = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_date,
+        )
+        entry_date.insert(index=ctk.END, string="nouvelle date")
+        global error_date
+        error_date = ctk.CTkLabel(
+            frame,
+            text="date not dispo",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+        error_date.place_forget()
+        entry_date.pack(pady=10)
+
+    def create_filter_bar(self):
+        frame_bar = ctk.CTkFrame(
+            self,
+            width=400,
+            height=91,
+            fg_color="#f8f8f8",
+            bg_color="#f8f8f8",
+            corner_radius=0,
+        )
+        frame_bar.place(relx=0.2, y=1, relwidth=0.8)
+
+        entry_filter = ctk.CTkEntry(
+            frame_bar,
+            text_color=Home.color,
+            font=(Home.font, 14),
+            fg_color="#f8f8f8",
+            height=35,
+            width=300,
+        ) 
+        entry_filter.place(y=30, x=280)
+        entry_filter.insert(index=ctk.END, string="Entrer votre matricule")
+        button_filter = ctk.CTkButton(
+            frame_bar,
+            text="Chercher par matricule professeur",
+            fg_color=Home.color,
+            font=(Home.font, 15),
+            bg_color="#f8f8f8",
+            height=35,
+            hover_color="#253f64",
+        )
+        button_filter.place(y=30, x=600)
+        button_filter.configure(cursor="hand2")
+
+    def get_data_from_json(self):       
         with open("./data.json", "r") as f:
             return json.load(f)["seances"]
 

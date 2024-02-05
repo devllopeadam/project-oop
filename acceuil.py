@@ -5,22 +5,6 @@ import json
 ctk.set_appearance_mode("light")
 
 
-class TestOne(ctk.CTk):
-    def __init__(self):
-        super().__init__()
-        self.title("Test One")
-        self.geometry("500x500")
-        label = ctk.CTkLabel(self, text="jeniah adam").pack()
-
-
-class TestTwo(ctk.CTk):
-    def __init__(self):
-        super().__init__()
-        self.title("Test Two")
-        self.geometry("500x500")
-        label = ctk.CTkLabel(self, text="jeniah adam").pack()
-
-
 class Home(ctk.CTk):
     font = "Verdana"
     color = "#1d3557"
@@ -177,11 +161,82 @@ class Home(ctk.CTk):
         value = value_entry_del.get()
         aridSeance = [i["idSeance"] for i in self.get_data_from_json()]
         if value in aridSeance:
+            # Seance.supprimerSeance(value)
+            error.place_forget()
             table.delete(*table.get_children())
             for i in self.get_data_from_json():
                 table.insert(parent="", index="end", values=list(i.values()))
         else:
             error.place(relx=0.5, y=110, anchor="center")
+
+    def modification(self):
+        final = []
+        aridSeance = [i["idSeance"] for i in self.get_data_from_json()]
+        pro = [i["professeur"][1][1:-1] for i in self.get_data_from_json()]
+        mats = [i["matiere"] for i in self.get_data_from_json()]
+        sals = [i["salle"] for i in self.get_data_from_json()]
+        newId = value_entry_idSeance.get()
+        newPro = value_entry_professeur.get()
+        newMatiere = value_entry_matiere.get()
+        newSalle = value_entry_salle.get()
+        newDate = value_entry_date.get()
+        # newDate = value
+        if value_entry_mod.get() in aridSeance:
+            error_mod.place_forget()
+            # For the new id checking
+            if newId == "nouveau id" or newId == "":
+                error_id.place(relx=0.5, anchor="center", y=325)
+            elif newId in aridSeance:
+                error_id.place(relx=0.5, anchor="center", y=325)
+            else:
+                error_id.place_forget()
+                final.append(newId)
+            # For the new pro checking
+            if newPro == "nouveau matricule pro" or newPro == "":
+                error_professeur.place(relx=0.5, anchor="center", y=380)
+            elif newPro not in pro:
+                error_professeur.place(relx=0.5, anchor="center", y=387)
+            elif newPro in pro:
+                error_professeur.place_forget()
+                for i in self.get_data_from_json():
+                    if i["professeur"][1][1:-1] == newPro:
+                        final.append(i)
+
+            # For the new matiere checking
+
+            if newMatiere == "nouvelle matiere" or newMatiere == "":
+                error_matiere.place(relx=0.5, anchor="center", y=439)
+            elif newMatiere not in mats:
+                error_matiere.place(relx=0.5, anchor="center", y=439)
+            elif newMatiere in mats:
+                error_matiere.place_forget()
+                for i in self.get_data_from_json():
+                    if i["matiere"] == newMatiere:
+                        final.append(i)
+                print(final)
+
+            # For the new Salle
+
+            if newSalle == "nouvelle salle" or newSalle == "":
+                error_salle.place(relx=0.5, anchor="center", y=495)
+            elif newSalle not in sals:
+                error_salle.place(relx=0.5, anchor="center", y=495)
+            elif newSalle in sals:
+                error_salle.place_forget()
+                for i in self.get_data_from_json():
+                    if i["salle"] == newSalle:
+                        final.append(i)
+
+            # For the data and the afficher salle dispo function
+            if newDate == "nouvelle date" or newSalle == "":
+                error_date.place(relx=0.5, anchor="center", y=550)
+
+            elif Seance.afficherSalleDispo(newSalle, newDate) == False:
+                error_date.place(relx=0.5, anchor="center", y=550)
+            elif Seance.afficherSalleDispo(newSalle, newDate):
+                print("biba")
+        else:
+            error_mod.place(relx=0.5, y=260, anchor="center")
 
     def create_action_panel(self):
         # for the frame
@@ -200,7 +255,7 @@ class Home(ctk.CTk):
             text_color="white",
             height=35,
             hover_color="#f53737",
-            command=self.get_data_entry_check,
+            command=lambda: self.get_data_entry_check(),
         )
         del_button.configure(cursor="hand2")
         del_button.pack(pady=20)
@@ -211,15 +266,19 @@ class Home(ctk.CTk):
             placeholder_text="Entrer id seance",
             width=170,
             height=35,
-            font=(Home.font, 14),
+            font=(Home.font, 13),
             textvariable=value_entry_del,
         )
         entry_del.pack(pady=20)
+        entry_del.insert(ctk.END, "Entrer id seance")
         global error
         error = ctk.CTkLabel(
-            frame, text="idSeance not found", text_color="#FF0033", height=20
+            frame,
+            text="idSeance not found",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
         )
-        # error.place(relx=0.5, y=110, anchor="center")
         error.place_forget()
         # modification button
         modi_button = ctk.CTkButton(
@@ -230,8 +289,147 @@ class Home(ctk.CTk):
             text_color="white",
             height=35,
             hover_color="#2ee28b",
+            command=self.modification,
         )
+        global value_entry_mod
+        value_entry_mod = ctk.StringVar()
+
+        entry_mod = ctk.CTkEntry(
+            frame,
+            placeholder_text="Entrer id seance",
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_mod,
+        )
+        global error_mod
+        error_mod = ctk.CTkLabel(
+            frame,
+            text="id not found",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+
         modi_button.pack(pady=20)
+        error_mod.place_forget()
+        entry_mod.insert(ctk.END, "Entrer id seance")
+        entry_mod.pack(pady=20)
+
+        # start other entries for modifying the seance
+        # entry for new id
+        global value_entry_idSeance
+        value_entry_idSeance = ctk.StringVar()
+        global entry_idSeance
+        entry_idSeance = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_idSeance,
+        )
+        global error_id
+        error_id = ctk.CTkLabel(
+            frame,
+            text="id always exist",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+        error_id.place_forget()
+        entry_idSeance.insert(index=ctk.END, string="nouveau id")
+        entry_idSeance.pack(pady=10)
+        # entry for new professeur
+        global value_entry_professeur
+        value_entry_professeur = ctk.StringVar()
+        global entry_professeur
+        entry_professeur = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_professeur,
+        )
+        entry_professeur.insert(index=ctk.END, string="nouveau matricule pro")
+        global error_professeur
+        error_professeur = ctk.CTkLabel(
+            frame,
+            text="Professeur not found",
+            text_color="#FF0033",
+            height=15,
+            font=(Home.font, 11),
+        )
+        error_professeur.place_forget()
+        entry_professeur.pack(pady=10)
+
+        # entry for new matiere
+        global value_entry_matiere
+        value_entry_matiere = ctk.StringVar()
+        global entry_matiere
+        entry_matiere = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_matiere,
+        )
+        entry_matiere.insert(index=ctk.END, string="nouvelle matiere")
+        global error_matiere
+        error_matiere = ctk.CTkLabel(
+            frame,
+            text="Matiere not found",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+        error_matiere.place_forget()
+        entry_matiere.pack(pady=10)
+
+        # Entry for salle
+        global value_entry_salle
+        value_entry_salle = ctk.StringVar()
+        global entry_salle
+        entry_salle = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_salle,
+        )
+        entry_salle.insert(index=ctk.END, string="nouvelle salle")
+        global error_salle
+        error_salle = ctk.CTkLabel(
+            frame,
+            text="salle not found",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+        error_salle.place_forget()
+        entry_salle.pack(pady=10)
+
+        # entry for date
+        global value_entry_date
+        value_entry_date = ctk.StringVar()
+        global entry_date
+        entry_date = ctk.CTkEntry(
+            frame,
+            width=170,
+            height=35,
+            font=(Home.font, 13),
+            textvariable=value_entry_date,
+        )
+        entry_date.insert(index=ctk.END, string="nouvelle date")
+        global error_date
+        error_date = ctk.CTkLabel(
+            frame,
+            text="date not dispo",
+            text_color="#FF0033",
+            height=20,
+            font=(Home.font, 11),
+        )
+        error_date.place_forget()
+        entry_date.pack(pady=10)
 
     def get_data_from_json(self):
         with open("./data.json", "r") as f:
