@@ -1,7 +1,7 @@
 {
   "utilisateurs": [
     {
-      "login": "test",
+      "login": "newTest",
       "password": "test12",
       "email": "test@gmail.com"
     },
@@ -13,21 +13,14 @@
   ],
   "seances": [
     {
-      "idSeance": "newSeance",
+      "idSeance": "seanceOne",
       "professeur": "1234",
-      "matiere": "last1111",
+      "matiere": "fr1230",
       "salle": "newSalle",
       "dateSeance": "02/07/2024"
     }
   ],
   "professeurs": [
-    {
-      "nom": "jeniah",
-      "prenom": "adam",
-      "cin": "kb243538",
-      "filiere": "dev",
-      "matricule": "1234"
-    },
     {
       "nom": "mrabet",
       "prenom": "anas",

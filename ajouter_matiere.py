@@ -160,4 +160,4 @@ class AjouterMatiere(ctk.CTk):
             return json.load(f)["matieres"]
 
 
-AjouterMatiere().mainloop()
+# AjouterMatiere().mainloop()

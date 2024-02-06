@@ -271,4 +271,4 @@ class AjouterSeance(ctk.CTk):
             return json.load(f)["seances"]
 
 
-AjouterSeance().mainloop()
+# AjouterSeance().mainloop()

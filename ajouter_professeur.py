@@ -247,4 +247,4 @@ class AjouterProfesseur(ctk.CTk):
             return json.load(f)["professeurs"]
 
 
-AjouterProfesseur().mainloop()
+# AjouterProfesseur().mainloop()

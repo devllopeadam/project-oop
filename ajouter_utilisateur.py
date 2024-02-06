@@ -184,4 +184,4 @@ class AjouterUtilisateur(ctk.CTk):
             return json.load(f)["utilisateurs"]
 
 
-AjouterUtilisateur().mainloop()
+# AjouterUtilisateur().mainloop()

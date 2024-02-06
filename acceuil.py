@@ -1,9 +1,15 @@
 import customtkinter as ctk
 from tkinter import ttk
 import json
+from seance import Seance
+from afficher_utilisateur import AfficherUtilisateur
+from ajouter_utilisateur import AjouterUtilisateur
+from ajouter_professeur import AjouterProfesseur
+from ajouter_salle import AjouterSalle
+from ajouter_matiere import AjouterMatiere
+from ajouter_seance import AjouterSeance
 
 ctk.set_appearance_mode("light")
-from seance import Seance
 
 
 class Home(ctk.CTk):
@@ -150,20 +156,21 @@ class Home(ctk.CTk):
             table.insert(parent="", index="end", values=list(i.values()))
 
     def close_current_window(self, choice):
-        value = choice
-        print(value)
+        print(choice)
         if choice != "":
             self.destroy()
         if choice == "Ajouter Utilisateur":
-            from ajouter_utilisateur import AjouterUtilisateur
+            AjouterUtilisateur().mainloop()
         elif choice == "Ajouter Professeur":
-            from ajouter_professeur import AjouterProfesseur
+            AjouterProfesseur().mainloop()
         elif choice == "Ajouter salle":
-            from ajouter_salle import AjouterSalle
+            AjouterSalle().mainloop()
         elif choice == "Ajouter matière":
-            from ajouter_matiere import AjouterMatiere
+            AjouterMatiere().mainloop()
         elif choice == "Ajouter séance":
-            from ajouter_seance import AjouterSeance
+            AjouterSeance().mainloop()
+        elif choice == "Afficher Utilisateurs":
+            AfficherUtilisateur().mainloop()
 
     def get_data_entry_check(self):
         value = value_entry_del.get()

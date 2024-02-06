@@ -160,4 +160,4 @@ class AjouterSalle(ctk.CTk):
             return json.load(f)["salles"]
 
 
-AjouterSalle().mainloop()
+# AjouterSalle().mainloop()

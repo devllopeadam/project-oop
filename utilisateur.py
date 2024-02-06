@@ -21,12 +21,14 @@ class Utilisateur:
             json.dump(data, file, indent=2)
 
     def supprimerUtilisateur(login):
-        for i in Utilisateur.utils:
-            if i["login"] == login:
-                Utilisateur.utils.remove(i)
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["utilisateurs"]
+            for i in ar:
+                if i["login"] == login:
+                    ar.remove(i)
         with open("./data.json", "r") as file:
             data = json.load(file)
-        data["utilisateurs"] = Utilisateur.utils
+        data["utilisateurs"] = ar
 
         with open("./data.json", "w") as file:
             json.dump(data, file, indent=2)
@@ -46,11 +48,19 @@ class Utilisateur:
 
     @classmethod
     def mofidierUtilisateur(cls, login, newLogin, newPassword, newEmail):
-        for i in Utilisateur.utils:
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["utilisateurs"]
+        for i in ar:
             if i["login"] == login:
                 i["login"] = newLogin
-                i["password"] = newPassword
-                i["email"] = newEmail
+                i["password"] == newPassword
+                i["email"] == newEmail
+
+        with open("./data.json", "r") as file:
+            data = json.load(file)
+            data["utilisateurs"] = ar
+        with open("./data.json", "w") as file:
+            json.dump(data, file, indent=2)
 
     @classmethod
     def authentifier(cls, login, password):

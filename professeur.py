@@ -27,13 +27,14 @@ class Professeur(Person):
             json.dump(data, file, indent=2)
 
     def supprimerProfesseur(cin):
-        for i in Professeur.professeurs:
-            if i["cin"] == cin:
-                Professeur.professeurs.remove(i)
-
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["professeurs"]
+            for i in ar:
+                if i["cin"] == cin:
+                    ar.remove(i)
         with open("./data.json", "r") as file:
             data = json.load(file)
-        data["professeurs"] = Professeur.professeurs
+        data["professeurs"] = ar
 
         with open("./data.json", "w") as file:
             json.dump(data, file, indent=2)
