@@ -24,3 +24,11 @@
 une colonne d’action ou on déposera deux boutons « supprimer » et « modifier » le
 premier supprimera la séance sélectionnée et le deuxième modifiera les informations
 de la séance
+
+
+
+project_folder/
+    external_class.py
+    external_folder/
+        my_class.py
+

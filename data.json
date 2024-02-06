@@ -1,71 +1,23 @@
 {
   "utilisateurs": [
     {
+      "login": "test",
+      "password": "test12",
+      "email": "test@gmail.com"
+    },
+    {
       "login": "adam04",
       "password": "123456",
-      "email": "jeniahadam@gmail.com"
-    },
-    {
-      "login": "med07",
-      "password": "789456",
-      "email": "med@gmail.com"
-    },
-    {
-      "login": "jeniah",
-      "password": "7500",
-      "email": "jeniah7500@gmail.com"
-    },
-    {
-      "login": "mosaab",
-      "password": "5550",
-      "email": "mosaab5550@gmail.com"
-    },
-    {
-      "login": "mohamed",
-      "password": "4444",
-      "email": "mohamed4444@gmail.com"
-    },
-    {
-      "login": "Yasser",
-      "password": "3333",
-      "email": "yasser3333@gmail.com"
+      "email": "adam@gmail.com"
     }
   ],
   "seances": [
     {
-      "idSeance": "fSeance",
+      "idSeance": "newSeance",
       "professeur": "1234",
-      "matiere": "fr1230",
-      "salle": "salleE",
-      "dateSeance": "24/06/2024"
-    },
-    {
-      "idSeance": "gSeance",
-      "professeur": "1234",
-      "matiere": "en500",
-      "salle": "salleJ",
-      "dateSeance": "25/06/2024"
-    },
-    {
-      "idSeance": "nSeance",
-      "professeur": "7600",
-      "matiere": "fr1230",
-      "salle": "salleH",
-      "dateSeance": "30/07/2024"
-    },
-    {
-      "idSeance": "mSeance",
-      "professeur": "7600",
-      "matiere": "fr1230",
-      "salle": "salleH",
-      "dateSeance": "23/05/2024"
-    },
-    {
-      "idSeance": "secondSeance",
-      "professeur": "kooraforlife",
-      "matiere": "en500",
-      "salle": "salleH",
-      "dateSeance": "20/25/2024"
+      "matiere": "last1111",
+      "salle": "newSalle",
+      "dateSeance": "02/07/2024"
     }
   ],
   "professeurs": [
@@ -101,6 +53,33 @@
       "idMatiere": "en500",
       "libelle": "english course",
       "langue": "English"
+    },
+    {
+      "idMatiere": "last1111",
+      "libelle": "matiere math",
+      "langue": "francais"
+    }
+  ],
+  "salles": [
+    {
+      "idSalle": "newSalle",
+      "libelle": "salle de pc",
+      "numero": "7600"
+    },
+    {
+      "idSalle": "salleE",
+      "libelle": "pour la salle E",
+      "numero": 80
+    },
+    {
+      "idSalle": "salleJ",
+      "libelle": "pour la salle j",
+      "numero": "math"
+    },
+    {
+      "idSalle": "salleH",
+      "libelle": "pour la salle h",
+      "numero": "pc"
     }
   ]
 }
