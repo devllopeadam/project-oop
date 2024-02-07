@@ -1,124 +1,39 @@
+import json
 import customtkinter as ctk
 from tkinter import ttk
-import json
 from seance import Seance
-from afficher_utilisateur import AfficherUtilisateur
-from afficher_professeur import AfficherProfesseur
-from afficher_salle import AfficherSalle
-from ajouter_utilisateur import AjouterUtilisateur
-from ajouter_professeur import AjouterProfesseur
-from ajouter_salle import AjouterSalle
-from ajouter_matiere import AjouterMatiere
-from ajouter_seance import AjouterSeance
 
 ctk.set_appearance_mode("light")
 
 
-class Home(ctk.CTk):
+class AfficherSeance(ctk.CTk):
     font = "Verdana"
     color = "#1d3557"
 
     def __init__(self):
         super().__init__()
-        self.title("Acceuil")
-        self.geometry("1470x750+40+15")
-        self.resizable(False, False)
-        self.iconbitmap("./images/home_icon.ico")
-        self.create_control_panel_frame()
+        self.title("Afficher Seance")
+        self.geometry("1300x750+125+15")
+        self.iconbitmap("./images/user_icon.ico")
         self.create_treeview()
         self.get_data_from_json()
         self.create_action_panel()
         self.create_filter_bar()
 
-    def create_control_panel_frame(self):
-        frame = ctk.CTkFrame(self, fg_color="white", corner_radius=0)
-        frame.place(x=0, y=0, relheight=1, relwidth=0.2)
-
-        def create_button(values):
-            return ctk.CTkComboBox(
-                frame,
-                values=values,
-                fg_color=Home.color,
-                font=(Home.font, 15),
-                text_color="white",
-                button_color=Home.color,
-                border_color=Home.color,
-                button_hover_color="#274063",
-                width=210,
-                height=40,
-                dropdown_font=(Home.font, 15),
-                dropdown_text_color="white",
-                dropdown_fg_color=Home.color,
-                dropdown_hover_color="#274063",
-                command=self.close_current_window,
-            )
-
-        # Gestion Utilisateur
-        gestion_utilisateur_button = create_button(
-            ["Ajouter Utilisateur", "Afficher Utilisateurs"]
-        )
-        gestion_utilisateur_button.set("Gestion Utilisateur")
-        gestion_utilisateur_button.pack(padx=20, pady=20)
-
-        # Gestion Personne
-        gestion_personne_button = create_button(
-            [
-                "Ajouter Apprenant",
-                "Afficher Apprenant",
-                "Ajouter Professeur",
-                "Afficher Professeur",
-                "Ajouter Responsable",
-                "Afficher Responsable",
-            ]
-        )
-        gestion_personne_button.set("Gestion Personne")
-        gestion_personne_button.pack(padx=20, pady=20)
-
-        # Gestion des Matieres
-        gestion_matieres_button = create_button(["Ajouter matière", "Afficher matière"])
-        gestion_matieres_button.set("Gestion matières")
-        gestion_matieres_button.pack(pady=20, padx=20)
-
-        # Gestion des salles
-        gestion_salle_button = create_button(["Ajouter salle", "Afficher salles"])
-        gestion_salle_button.pack(pady=20, padx=20)
-        gestion_salle_button.set("Gestion salles")
-
-        # Gestion des seances
-        gestion_seances_button = create_button(["Ajouter séance", "Afficher séance"])
-        gestion_seances_button.pack(pady=20, padx=20)
-        gestion_seances_button.set("Gestion séances")
-
-        # The quit
-
-        quit_button = ctk.CTkButton(
-            frame,
-            text="Quit",
-            text_color="white",
-            fg_color="#FF3333",
-            hover_color="#ff4848",
-            font=(Home.font, 15),
-            width=210,
-            height=40,
-            command=lambda: self.destroy(),
-        )
-        quit_button.place(x=33, rely=0.911)
-        quit_button.configure(cursor="hand2")
-
     def create_treeview(self):
         frame = ctk.CTkFrame(self, corner_radius=0)
-        frame.place(relx=0.2, y=91, relheight=0.88, relwidth=0.64)
+        frame.place(relx=0, y=91, relheight=1, relwidth=0.78)
         style = ttk.Style()
         style.configure(
             "Treeview.Heading",
-            font=(Home.font, 14, "normal"),
+            font=(self.font, 14, "normal"),
             fg_color="red",
             padding=(10, 10),
         )
         style.configure(
             "Custom.Treeview",
-            font=(Home.font, 14, "normal"),
-            foreground=Home.color,
+            font=(self.font, 14, "normal"),
+            foreground=self.color,
             background="#f8f8f8",
             rowheight=37,
             anchor="center",
@@ -156,27 +71,6 @@ class Home(ctk.CTk):
 
         for i in self.get_data_from_json():
             table.insert(parent="", index="end", values=list(i.values()))
-
-    def close_current_window(self, choice):
-        print(choice)
-        if choice != "":
-            self.destroy()
-        if choice == "Ajouter Utilisateur":
-            AjouterUtilisateur().mainloop()
-        elif choice == "Ajouter Professeur":
-            AjouterProfesseur().mainloop()
-        elif choice == "Ajouter salle":
-            AjouterSalle().mainloop()
-        elif choice == "Ajouter matière":
-            AjouterMatiere().mainloop()
-        elif choice == "Ajouter séance":
-            AjouterSeance().mainloop()
-        elif choice == "Afficher Utilisateurs":
-            AfficherUtilisateur().mainloop()
-        elif choice == "Afficher Professeur":
-            AfficherProfesseur().mainloop()
-        elif choice == "Afficher salles":
-            AfficherSalle().mainloop()
 
     def get_data_entry_check(self):
         value = value_entry_del.get()
@@ -285,16 +179,16 @@ class Home(ctk.CTk):
     def create_action_panel(self):
         # for the frame
         frame = ctk.CTkFrame(self, corner_radius=0, fg_color="white")
-        frame.place(relx=0.84, y=91, relheight=0.88, relwidth=0.16)
+        frame.place(relx=0.78, y=91, relheight=0.88, relwidth=0.22)
         frame_title = ctk.CTkLabel(
-            frame, text="Action", font=(Home.font, 15), text_color=Home.color
+            frame, text="Action", font=(self.font, 15), text_color=self.color
         )
         frame_title.pack()
         # Delete and entry button
         del_button = ctk.CTkButton(
             frame,
             text="Supprimer",
-            font=(Home.font, 15),
+            font=(self.font, 15),
             fg_color="red",
             text_color="white",
             height=35,
@@ -308,9 +202,9 @@ class Home(ctk.CTk):
         entry_del = ctk.CTkEntry(
             frame,
             placeholder_text="Entrer id seance",
-            width=170,
+            width=200,
             height=35,
-            font=(Home.font, 13),
+            font=(self.font, 13),
             textvariable=value_entry_del,
         )
         entry_del.pack(pady=20)
@@ -321,14 +215,14 @@ class Home(ctk.CTk):
             text="idSeance not found",
             text_color="#FF0033",
             height=20,
-            font=(Home.font, 11),
+            font=(self.font, 11),
         )
         error.place_forget()
         # modification button
         modi_button = ctk.CTkButton(
             frame,
             text="Modifier",
-            font=(Home.font, 15),
+            font=(self.font, 15),
             fg_color="#26D782",
             text_color="white",
             height=35,
@@ -341,9 +235,9 @@ class Home(ctk.CTk):
         entry_mod = ctk.CTkEntry(
             frame,
             placeholder_text="Entrer id seance",
-            width=170,
+            width=200,
             height=35,
-            font=(Home.font, 13),
+            font=(self.font, 13),
             textvariable=value_entry_mod,
         )
         global error_mod
@@ -352,7 +246,7 @@ class Home(ctk.CTk):
             text="id not found",
             text_color="#FF0033",
             height=20,
-            font=(Home.font, 11),
+            font=(self.font, 11),
         )
 
         modi_button.pack(pady=20)
@@ -367,9 +261,9 @@ class Home(ctk.CTk):
         global entry_idSeance
         entry_idSeance = ctk.CTkEntry(
             frame,
-            width=170,
+            width=200,
             height=35,
-            font=(Home.font, 13),
+            font=(self.font, 13),
             textvariable=value_entry_idSeance,
         )
         global error_id
@@ -378,7 +272,7 @@ class Home(ctk.CTk):
             text="id always exist",
             text_color="#FF0033",
             height=20,
-            font=(Home.font, 11),
+            font=(self.font, 11),
         )
         error_id.place_forget()
         entry_idSeance.insert(index=ctk.END, string="nouveau id")
@@ -389,9 +283,9 @@ class Home(ctk.CTk):
         global entry_professeur
         entry_professeur = ctk.CTkEntry(
             frame,
-            width=170,
+            width=200,
             height=35,
-            font=(Home.font, 13),
+            font=(self.font, 13),
             textvariable=value_entry_professeur,
         )
         entry_professeur.insert(index=ctk.END, string="nouveau matricule pro")
@@ -401,7 +295,7 @@ class Home(ctk.CTk):
             text="Professeur not found",
             text_color="#FF0033",
             height=15,
-            font=(Home.font, 11),
+            font=(self.font, 11),
         )
         error_professeur.place_forget()
         entry_professeur.pack(pady=10)
@@ -412,9 +306,9 @@ class Home(ctk.CTk):
         global entry_matiere
         entry_matiere = ctk.CTkEntry(
             frame,
-            width=170,
+            width=200,
             height=35,
-            font=(Home.font, 13),
+            font=(self.font, 13),
             textvariable=value_entry_matiere,
         )
         entry_matiere.insert(index=ctk.END, string="nouvelle matiere")
@@ -424,7 +318,7 @@ class Home(ctk.CTk):
             text="Matiere not found",
             text_color="#FF0033",
             height=20,
-            font=(Home.font, 11),
+            font=(self.font, 11),
         )
         error_matiere.place_forget()
         entry_matiere.pack(pady=10)
@@ -435,9 +329,9 @@ class Home(ctk.CTk):
         global entry_salle
         entry_salle = ctk.CTkEntry(
             frame,
-            width=170,
+            width=200,
             height=35,
-            font=(Home.font, 13),
+            font=(self.font, 13),
             textvariable=value_entry_salle,
         )
         entry_salle.insert(index=ctk.END, string="nouvelle salle")
@@ -447,7 +341,7 @@ class Home(ctk.CTk):
             text="salle not found",
             text_color="#FF0033",
             height=20,
-            font=(Home.font, 11),
+            font=(self.font, 11),
         )
         error_salle.place_forget()
         entry_salle.pack(pady=10)
@@ -458,9 +352,9 @@ class Home(ctk.CTk):
         global entry_date
         entry_date = ctk.CTkEntry(
             frame,
-            width=170,
+            width=200,
             height=35,
-            font=(Home.font, 13),
+            font=(self.font, 13),
             textvariable=value_entry_date,
         )
         entry_date.insert(index=ctk.END, string="nouvelle date")
@@ -470,10 +364,55 @@ class Home(ctk.CTk):
             text="date not dispo",
             text_color="#FF0033",
             height=20,
-            font=(Home.font, 11),
+            font=(self.font, 11),
         )
         error_date.place_forget()
         entry_date.pack(pady=10)
+
+    def create_filter_bar(self):
+        frame_bar = ctk.CTkFrame(
+            self,
+            width=400,
+            height=91,
+            fg_color="#f8f8f8",
+            bg_color="#f8f8f8",
+            corner_radius=0,
+        )
+        frame_bar.place(relx=0, y=1, relwidth=1)
+        global value_entry_filter
+        value_entry_filter = ctk.StringVar()
+        entry_filter = ctk.CTkEntry(
+            frame_bar,
+            text_color=self.color,
+            font=(self.font, 14),
+            fg_color="#f8f8f8",
+            height=35,
+            width=300,
+            textvariable=value_entry_filter,
+        )
+        entry_filter.place(y=30, x=340)
+        entry_filter.insert(index=ctk.END, string="Entrer votre matricule")
+        button_filter = ctk.CTkButton(
+            frame_bar,
+            text="Chercher par matricule professeur",
+            fg_color=self.color,
+            font=(self.font, 15),
+            bg_color="#f8f8f8",
+            height=35,
+            hover_color="#253f64",
+            command=self.get_data_filter,
+        )
+        global error_filter
+        error_filter = ctk.CTkLabel(
+            frame_bar,
+            text="Professeur matricule not found",
+            text_color="#FF0033",
+            height=15,
+            font=(self.font, 11),
+        )
+        error_filter.place_forget()
+        button_filter.place(y=30, x=660)
+        button_filter.configure(cursor="hand2")
 
     def get_data_filter(self):
         value = value_entry_filter.get()
@@ -489,58 +428,13 @@ class Home(ctk.CTk):
                 table.insert(parent="", index="end", values=list(i.values()))
             error_filter.place_forget()
 
-    def create_filter_bar(self):
-        frame_bar = ctk.CTkFrame(
-            self,
-            width=400,
-            height=91,
-            fg_color="#f8f8f8",
-            bg_color="#f8f8f8",
-            corner_radius=0,
-        )
-        frame_bar.place(relx=0.2, y=1, relwidth=0.8)
-        global value_entry_filter
-        value_entry_filter = ctk.StringVar()
-        entry_filter = ctk.CTkEntry(
-            frame_bar,
-            text_color=Home.color,
-            font=(Home.font, 14),
-            fg_color="#f8f8f8",
-            height=35,
-            width=300,
-            textvariable=value_entry_filter,
-        )
-        entry_filter.place(y=30, x=280)
-        entry_filter.insert(index=ctk.END, string="Entrer votre matricule")
-        button_filter = ctk.CTkButton(
-            frame_bar,
-            text="Chercher par matricule professeur",
-            fg_color=Home.color,
-            font=(Home.font, 15),
-            bg_color="#f8f8f8",
-            height=35,
-            hover_color="#253f64",
-            command=self.get_data_filter,
-        )
-        global error_filter
-        error_filter = ctk.CTkLabel(
-            frame_bar,
-            text="Professeur matricule not found",
-            text_color="#FF0033",
-            height=15,
-            font=(Home.font, 11),
-        )
-        error_filter.place_forget()
-        button_filter.place(y=30, x=600)
-        button_filter.configure(cursor="hand2")
+    def get_data(self, value):
+        with open("./data.json", "r") as f:
+            return json.load(f)[value]
 
     def get_data_from_json(self):
         with open("./data.json", "r") as f:
             return json.load(f)["seances"]
 
-    def get_data(self, value):
-        with open("./data.json", "r") as f:
-            return json.load(f)[value]
 
-
-Home().mainloop()
+AfficherSeance().mainloop()

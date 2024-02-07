@@ -89,7 +89,7 @@ class AjouterSeance(ctk.CTk):
 
         if value_date.get() == "":
             error_date.place(x=330, y=420)
-        elif state == False:
+        elif state == True:
             # for update please
             error_date.configure("date not dispo")
             error_date.place(x=330, y=420)
@@ -97,8 +97,7 @@ class AjouterSeance(ctk.CTk):
             error_date.place_forget()
             final.append(value_date.get())
 
-        if len(final) != 0:
-            Seance.ajouterSeance(final[0], final[1], final[2], final[3], final[4])
+        Seance.ajouterSeance(final[0], final[1], final[2], final[3], final[4])
 
     def create_entries_frame(self):
         frame = ctk.CTkFrame(self, width=450, height=450, fg_color="#F1F1F1")

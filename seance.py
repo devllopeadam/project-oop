@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 
 class Seance:
@@ -47,7 +48,22 @@ class Seance:
     # ajouter une seance
     @classmethod
     def ajouterSeance(cls, idSeance, professeur, matiere, salle, dateSeance):
-        return cls(idSeance, professeur, matiere, salle, dateSeance)
+        with open("./data.json", "r") as f:
+            data = json.load(f)
+        ar = data["seances"]
+        ar.append(
+            {
+                "idSeance": idSeance,
+                "professeur": professeur["matricule"],
+                "matiere": matiere["idMatiere"],
+                "salle": salle["idSalle"],
+                "dateSeance": dateSeance,
+            }
+        )
+
+        data["seances"] = ar
+        with open("./data.json", "w") as f:
+            json.dump(data, f, indent=2)
 
     # modifier une seance
     @classmethod
@@ -74,7 +90,6 @@ class Seance:
     @classmethod
     def afficherSeanceProfesseur(cls, matricule):
         ar = []
-
         with open("./data.json", "r") as file:
             data = json.load(file)
             for i in data["seances"]:
@@ -84,13 +99,16 @@ class Seance:
 
     @classmethod
     def afficherSalleDispo(cls, idSalle, date):
+        ar = []
         with open("./data.json", "r") as file:
             data = json.load(file)["seances"]
-        all = [i["salle"] for i in data]
-        if date in all:
-            return False
-        else:
+        for i in data:
+            if i["salle"] == idSalle:
+                ar.append(i["dateSeance"])
+        if date in ar:
             return True
+        else:
+            return False
 
     @property
     def idSeance(self):

@@ -1,5 +1,6 @@
 import json
 from person import Person
+from seance import Seance
 
 
 class Professeur(Person):
@@ -62,18 +63,50 @@ class Professeur(Person):
     def mofidierProfesseur(
         cls, cin, newNom, newPrenom, newCin, newFiliere, newMatricule
     ):
-        for i in Professeur.professeurs:
+        with open("./data.json", "r") as file:
+            arS = json.load(file)["seances"]
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["professeurs"]
+
+        for i in ar:
             if i["cin"] == cin:
+                ele = i["matricule"]
                 i["nom"] = newNom
                 i["prenom"] = newPrenom
                 i["cin"] = newCin
                 i["filiere"] = newFiliere
                 i["matricule"] = newMatricule
-            with open("./data.json", "r") as file:
-                data = json.load(file)
-            data["professeurs"] = Professeur.professeurs
-            with open("./data.json", "w") as file:
-                json.dump(data, file, indent=2)
+        for i in arS:
+            if i["professeur"] == ele:
+                seM = i
+            else:
+                False
+
+        with open("./data.json", "r") as file:
+            data = json.load(file)
+            data["professeurs"] = ar
+        with open("./data.json", "w") as file:
+            json.dump(data, file, indent=2)
+
+        # for the modification of the seance salle
+        Seance.modifierSeance(
+            seM["idSeance"],
+            seM["idSeance"],
+            {
+                "nom": "biba",
+                "prenom": "khawa",
+                "cin": "adlfk",
+                "filiere": "adfas",
+                "matricule": newMatricule,
+            },
+            {
+                "idMatiere": seM["matiere"],
+                "libelle": "pour la langue francaise",
+                "langue": "Francais",
+            },
+            {"idSalle": seM["salle"], "libelle": "libelle", "numero": "numero"},
+            seM["dateSeance"],
+        )
 
     @property
     def filiere(self):

@@ -188,9 +188,9 @@ class Salle:
         return f"la salle de l'id {self.idSalle} de libelle {self.libelle}, et de numero {self.numero}"
 
 
-saleOne = Salle.ajouterSalle("salleE", "pour la salle E", 80)
-saleTwo = Salle.ajouterSalle("salleJ", "pour la salle j", "math")
-saleThree = Salle.ajouterSalle("salleH", "pour la salle h", "pc")
+# saleOne = Salle.ajouterSalle("salleE", "pour la salle E", 80)
+# saleTwo = Salle.ajouterSalle("salleJ", "pour la salle j", "math")
+# saleThree = Salle.ajouterSalle("salleH", "pour la salle h", "pc")
 # Salle.ajouterSalle("salleA", "pour la salle B", 60)
 # Salle.mofidierSalle("salleA", "salleA+", "Pour la salle A+", 62)
 

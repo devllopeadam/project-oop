@@ -1,4 +1,5 @@
 import json
+from seance import Seance
 
 
 class Matiere:
@@ -59,19 +60,45 @@ class Matiere:
     # to modify the matiere
     @classmethod
     def mofidierMatiere(cls, idMatiere, newIdMatiere, newLibelle, newLangue):
-        for i in Matiere.matieres:
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["matieres"]
+        for i in ar:
+            if i["salle"] == idMatiere:
+                seM = i
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["matieres"]
+        for i in ar:
             if i["idMatiere"] == idMatiere:
                 i["idMatiere"] = newIdMatiere
                 i["libelle"] = newLibelle
                 i["langue"] = newLangue
-            with open("./data.json", "r") as file:
-                data = json.load(file)
-            data["matieres"] = Matiere.matieres
-            with open("./data.json", "w") as file:
-                json.dump(data, file, indent=2)
+
+        with open("./data.json", "r") as file:
+            data = json.load(file)
+            data["matieres"] = ar
+        with open("./data.json", "w") as file:
+            json.dump(data, file, indent=2)
+
+        Seance.modifierSeance(
+            seM["idSeance"],
+            seM["idSeance"],
+            {
+                "nom": "any",
+                "prenom": "any",
+                "cin": "any",
+                "filiere": "any",
+                "matricule": seM["professeur"],
+            },
+            {
+                "idMatiere": newIdMatiere,
+                "libelle": "any",
+                "langue": "any",
+            },
+            {"idSalle": seM["salle"], "libelle": "any", "numero": "any"},
+            seM["dateSeance"],
+        )
 
     # the getters and the setters
-
     @property
     def idMatiere(self):
         return self.__idMatiere

@@ -1,5 +1,7 @@
 import json
 
+from seance import Seance
+
 
 class Salle:
     salles = []
@@ -21,12 +23,14 @@ class Salle:
 
     # to delete a salle from the salles list
     def supprimerSalle(idSalle):
-        for i in Salle.salles:
-            if i["idSalle"] == idSalle:
-                Salle.salles.remove(i)
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["salles"]
+            for i in ar:
+                if i["idSalle"] == idSalle:
+                    ar.remove(i)
         with open("./data.json", "r") as file:
             data = json.load(file)
-        data["salles"] = Salle.salles
+        data["salles"] = ar
 
         with open("./data.json", "w") as file:
             json.dump(data, file, indent=2)
@@ -46,16 +50,45 @@ class Salle:
     # to modify the salle
     @classmethod
     def mofidierSalle(cls, idSalle, newIdSalle, newLibelle, newNumero):
-        for i in Salle.salles:
+
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["seances"]
+        for i in ar:
+            if i["salle"] == idSalle:
+                seM = i
+        # for the modification of the salle
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["salles"]
+        for i in ar:
             if i["idSalle"] == idSalle:
                 i["idSalle"] = newIdSalle
                 i["libelle"] = newLibelle
                 i["numero"] = newNumero
-            with open("./data.json", "r") as file:
-                data = json.load(file)
-            data["salles"] = Salle.salles
-            with open("./data.json", "w") as file:
-                json.dump(data, file, indent=2)
+
+        with open("./data.json", "r") as file:
+            data = json.load(file)
+            data["salles"] = ar
+        with open("./data.json", "w") as file:
+            json.dump(data, file, indent=2)
+        # for the modification of the seance salle
+        Seance.modifierSeance(
+            seM["idSeance"],
+            seM["idSeance"],
+            {
+                "nom": "any",
+                "prenom": "any",
+                "cin": "any",
+                "filiere": "any",
+                "matricule": seM["professeur"],
+            },
+            {
+                "idMatiere": seM["matiere"],
+                "libelle": "any",
+                "langue": "any",
+            },
+            {"idSalle": newIdSalle, "libelle": "any", "numero": "any"},
+            seM["dateSeance"],
+        )
 
     # the getters and the setters
     @property

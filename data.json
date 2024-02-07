@@ -13,14 +13,28 @@
   ],
   "seances": [
     {
-      "idSeance": "seanceOne",
-      "professeur": "1234",
-      "matiere": "fr1230",
-      "salle": "newSalle",
-      "dateSeance": "02/07/2024"
+      "idSeance": "biba",
+      "professeur": "7600",
+      "matiere": "en500",
+      "salle": "salleM",
+      "dateSeance": "03/05/2024"
+    },
+    {
+      "idSeance": "final",
+      "professeur": "7600",
+      "matiere": "en500",
+      "salle": "salleM",
+      "dateSeance": "03/10/2024"
     }
   ],
   "professeurs": [
+    {
+      "nom": "Nadia",
+      "prenom": "elazhari",
+      "cin": "kl1414",
+      "filiere": "khiyata",
+      "matricule": "khiyata400"
+    },
     {
       "nom": "mrabet",
       "prenom": "anas",
@@ -46,33 +60,18 @@
       "idMatiere": "en500",
       "libelle": "english course",
       "langue": "English"
-    },
-    {
-      "idMatiere": "last1111",
-      "libelle": "matiere math",
-      "langue": "francais"
     }
   ],
   "salles": [
     {
       "idSalle": "newSalle",
-      "libelle": "salle de pc",
-      "numero": "7600"
+      "libelle": "math",
+      "numero": 7000
     },
     {
-      "idSalle": "salleE",
-      "libelle": "pour la salle E",
-      "numero": 80
-    },
-    {
-      "idSalle": "salleJ",
-      "libelle": "pour la salle j",
-      "numero": "math"
-    },
-    {
-      "idSalle": "salleH",
-      "libelle": "pour la salle h",
-      "numero": "pc"
+      "idSalle": "salleM",
+      "libelle": "salle math",
+      "numero": "5000"
     }
   ]
 }
