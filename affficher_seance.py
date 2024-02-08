@@ -437,4 +437,4 @@ class AfficherSeance(ctk.CTk):
             return json.load(f)["seances"]
 
 
-AfficherSeance().mainloop()
+# AfficherSeance().mainloop()

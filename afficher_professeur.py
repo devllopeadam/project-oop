@@ -334,4 +334,4 @@ class AfficherProfesseur(ctk.CTk):
             return json.load(f)["professeurs"]
 
 
-AfficherProfesseur().mainloop()
+# AfficherProfesseur().mainloop()

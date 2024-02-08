@@ -1,11 +1,9 @@
-import tkinter as tk
-from tkinter.font import Font
 import customtkinter as ctk
-from tkinter import ttk
 
 ctk.set_appearance_mode("light")
 
 from utilisateur import Utilisateur
+from acceuil import Home
 
 
 class Login(ctk.CTk):
@@ -28,7 +26,7 @@ class Login(ctk.CTk):
         login_title.pack(pady=30)
 
         # the inputs
-        input_frame = ctk.CTkFrame(self, width=400, height=450, fg_color="#eaeaea")
+        input_frame = ctk.CTkFrame(self, width=400, height=450, fg_color="#f0efef")
         input_frame.pack(pady=20, ipady=30)
         self.make_input(input_frame)
 
@@ -57,11 +55,6 @@ class Login(ctk.CTk):
                 justify="right",
             )
             error_label.place(y=20, x=xValue)
-
-        global hide_error
-
-        def hide_error():
-            error_label.place_forget()
 
         # first input
         global frameOne
@@ -124,7 +117,7 @@ class Login(ctk.CTk):
         try:
             if Utilisateur.authentifier(get_login, get_password) == True:
                 self.destroy()
-                from acceuil import Home
+                Home().mainloop()
             elif Utilisateur.authentifier(get_login, get_password) == False:
                 make_error(frameTwo, "Incorrect Password", 333, colorInvalid)
             else:
@@ -132,9 +125,6 @@ class Login(ctk.CTk):
                 make_error(frameOne, "Incorrect Login", 360, colorInvalid)
         except:
             print("Error for the hide function")
-
-        # print(f"login: {get_login}")
-        # print(f"Password: {get_password}")
 
 
 Login().mainloop()

@@ -50,12 +50,12 @@ class Salle:
     # to modify the salle
     @classmethod
     def mofidierSalle(cls, idSalle, newIdSalle, newLibelle, newNumero):
-
+        allSalle = []
         with open("./data.json", "r") as file:
             ar = json.load(file)["seances"]
         for i in ar:
             if i["salle"] == idSalle:
-                seM = i
+                allSalle.append(i)
         # for the modification of the salle
         with open("./data.json", "r") as file:
             ar = json.load(file)["salles"]
@@ -71,24 +71,25 @@ class Salle:
         with open("./data.json", "w") as file:
             json.dump(data, file, indent=2)
         # for the modification of the seance salle
-        Seance.modifierSeance(
-            seM["idSeance"],
-            seM["idSeance"],
-            {
-                "nom": "any",
-                "prenom": "any",
-                "cin": "any",
-                "filiere": "any",
-                "matricule": seM["professeur"],
-            },
-            {
-                "idMatiere": seM["matiere"],
-                "libelle": "any",
-                "langue": "any",
-            },
-            {"idSalle": newIdSalle, "libelle": "any", "numero": "any"},
-            seM["dateSeance"],
-        )
+        for i in allSalle:
+            Seance.modifierSeance(
+                i["idSeance"],
+                i["idSeance"],
+                {
+                    "nom": "any",
+                    "prenom": "any",
+                    "cin": "any",
+                    "filiere": "any",
+                    "matricule": i["professeur"],
+                },
+                {
+                    "idMatiere": i["matiere"],
+                    "libelle": "any",
+                    "langue": "any",
+                },
+                {"idSalle": newIdSalle, "libelle": "any", "numero": "any"},
+                i["dateSeance"],
+            )
 
     # the getters and the setters
     @property

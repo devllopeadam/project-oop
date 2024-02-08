@@ -29,12 +29,14 @@ class Matiere:
 
     # to delete a specific matiere using the idMatiere
     def supprimerMatiere(idMatiere):
-        for i in Matiere.matieres:
-            if i["idMatiere"] == idMatiere:
-                Matiere.matieres.remove(i)
+        with open("./data.json", "r") as file:
+            ar = json.load(file)["matieres"]
+            for i in ar:
+                if i["idMatiere"] == idMatiere:
+                    ar.remove(i)
         with open("./data.json", "r") as file:
             data = json.load(file)
-        data["matieres"] = Matiere.matieres
+        data["matieres"] = ar
 
         with open("./data.json", "w") as file:
             json.dump(data, file, indent=2)
@@ -60,11 +62,13 @@ class Matiere:
     # to modify the matiere
     @classmethod
     def mofidierMatiere(cls, idMatiere, newIdMatiere, newLibelle, newLangue):
+        allSea = []
         with open("./data.json", "r") as file:
-            ar = json.load(file)["matieres"]
-        for i in ar:
-            if i["salle"] == idMatiere:
-                seM = i
+            arS = json.load(file)["seances"]
+        for i in arS:
+            if i["matiere"] == idMatiere:
+                allSea.append(i)
+
         with open("./data.json", "r") as file:
             ar = json.load(file)["matieres"]
         for i in ar:
@@ -79,24 +83,25 @@ class Matiere:
         with open("./data.json", "w") as file:
             json.dump(data, file, indent=2)
 
-        Seance.modifierSeance(
-            seM["idSeance"],
-            seM["idSeance"],
-            {
-                "nom": "any",
-                "prenom": "any",
-                "cin": "any",
-                "filiere": "any",
-                "matricule": seM["professeur"],
-            },
-            {
-                "idMatiere": newIdMatiere,
-                "libelle": "any",
-                "langue": "any",
-            },
-            {"idSalle": seM["salle"], "libelle": "any", "numero": "any"},
-            seM["dateSeance"],
-        )
+        for i in allSea:
+            Seance.modifierSeance(
+                i["idSeance"],
+                i["idSeance"],
+                {
+                    "nom": "any",
+                    "prenom": "any",
+                    "cin": "any",
+                    "filiere": "any",
+                    "matricule": i["professeur"],
+                },
+                {
+                    "idMatiere": newIdMatiere,
+                    "libelle": "any",
+                    "langue": "any",
+                },
+                {"idSalle": i["salle"], "libelle": "any", "numero": "any"},
+                i["dateSeance"],
+            )
 
     # the getters and the setters
     @property

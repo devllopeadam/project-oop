@@ -5,11 +5,13 @@ from seance import Seance
 from afficher_utilisateur import AfficherUtilisateur
 from afficher_professeur import AfficherProfesseur
 from afficher_salle import AfficherSalle
+from afficher_matiere import AfficherMatiere
 from ajouter_utilisateur import AjouterUtilisateur
 from ajouter_professeur import AjouterProfesseur
 from ajouter_salle import AjouterSalle
 from ajouter_matiere import AjouterMatiere
 from ajouter_seance import AjouterSeance
+
 
 ctk.set_appearance_mode("light")
 
@@ -158,7 +160,6 @@ class Home(ctk.CTk):
             table.insert(parent="", index="end", values=list(i.values()))
 
     def close_current_window(self, choice):
-        print(choice)
         if choice != "":
             self.destroy()
         if choice == "Ajouter Utilisateur":
@@ -177,6 +178,8 @@ class Home(ctk.CTk):
             AfficherProfesseur().mainloop()
         elif choice == "Afficher salles":
             AfficherSalle().mainloop()
+        elif choice == "Afficher séance":
+            AfficherMatiere().mainloop()
 
     def get_data_entry_check(self):
         value = value_entry_del.get()
@@ -543,4 +546,4 @@ class Home(ctk.CTk):
             return json.load(f)[value]
 
 
-Home().mainloop()
+# Home().mainloop()

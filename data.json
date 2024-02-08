@@ -9,20 +9,25 @@
       "login": "adam04",
       "password": "123456",
       "email": "adam@gmail.com"
+    },
+    {
+      "login": "moiz",
+      "password": "moiz123",
+      "email": "moiz@gmail.com"
     }
   ],
   "seances": [
     {
       "idSeance": "biba",
-      "professeur": "7600",
-      "matiere": "en500",
+      "professeur": "prog123",
+      "matiere": "newId",
       "salle": "salleM",
       "dateSeance": "03/05/2024"
     },
     {
       "idSeance": "final",
-      "professeur": "7600",
-      "matiere": "en500",
+      "professeur": "prog123",
+      "matiere": "good",
       "salle": "salleM",
       "dateSeance": "03/10/2024"
     }
@@ -36,30 +41,23 @@
       "matricule": "khiyata400"
     },
     {
-      "nom": "mrabet",
-      "prenom": "anas",
-      "cin": "kb243348",
-      "filiere": "pc",
-      "matricule": "7600"
-    },
-    {
-      "nom": "mbape",
-      "prenom": "jeniah",
-      "cin": "123riyah",
-      "filiere": "ball",
-      "matricule": "kooraforlife"
+      "nom": "Adam",
+      "prenom": "Jeniah",
+      "cin": "kb5500",
+      "filiere": "programing",
+      "matricule": "prog123"
     }
   ],
   "matieres": [
     {
-      "idMatiere": "fr1230",
-      "libelle": "pour la langue francaise",
-      "langue": "Francais"
+      "idMatiere": "good",
+      "libelle": "good",
+      "langue": "english"
     },
     {
-      "idMatiere": "en500",
-      "libelle": "english course",
-      "langue": "English"
+      "idMatiere": "newId",
+      "libelle": "libelle",
+      "langue": "math"
     }
   ],
   "salles": [
