@@ -64,12 +64,16 @@ class AfficherSeance(ctk.CTk):
         table.heading("idSeance", text="Id Seance")
         table.heading("professeur", text="Professeur matricule")
         table.heading("matiere", text="Matiere id")
-        table.heading("salle", text="Salle id")
+        table.heading("salle", text="Salle libelle")
         table.heading("dateSeance", text="Date Seance")
 
         table.pack(fill="both", expand=True)
 
+        ar = []
         for i in self.get_data_from_json():
+            i["salle"] = self.get_libelle_from_id(i["salle"])
+            ar.append(i)
+        for i in ar:
             table.insert(parent="", index="end", values=list(i.values()))
 
     def get_data_entry_check(self):
@@ -79,7 +83,11 @@ class AfficherSeance(ctk.CTk):
             Seance.supprimerSeance(value)
             error.place_forget()
             table.delete(*table.get_children())
+            ar = []
             for i in self.get_data_from_json():
+                i["salle"] = self.get_libelle_from_id(i["salle"])
+                ar.append(i)
+            for i in ar:
                 table.insert(parent="", index="end", values=list(i.values()))
         else:
             error.place(relx=0.5, y=110, anchor="center")
@@ -169,7 +177,11 @@ class AfficherSeance(ctk.CTk):
                     final[4],
                 )
                 table.delete(*table.get_children())
+                ar = []
                 for i in self.get_data_from_json():
+                    i["salle"] = self.get_libelle_from_id(i["salle"])
+                    ar.append(i)
+                for i in ar:
                     table.insert(parent="", index="end", values=list(i.values()))
             except:
                 print("final list error")
@@ -435,6 +447,13 @@ class AfficherSeance(ctk.CTk):
     def get_data_from_json(self):
         with open("./data.json", "r") as f:
             return json.load(f)["seances"]
+
+    def get_libelle_from_id(self, id):
+        with open("./data.json", "r") as f:
+            data = json.load(f)["salles"]
+        for i in data:
+            if i["idSalle"] == id:
+                return i["libelle"]
 
 
 # AfficherSeance().mainloop()

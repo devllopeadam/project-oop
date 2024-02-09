@@ -6,6 +6,7 @@ from afficher_utilisateur import AfficherUtilisateur
 from afficher_professeur import AfficherProfesseur
 from afficher_salle import AfficherSalle
 from afficher_matiere import AfficherMatiere
+from affficher_seance import AfficherSeance
 from ajouter_utilisateur import AjouterUtilisateur
 from ajouter_professeur import AjouterProfesseur
 from ajouter_salle import AjouterSalle
@@ -151,12 +152,15 @@ class Home(ctk.CTk):
         table.heading("idSeance", text="Id Seance")
         table.heading("professeur", text="Professeur matricule")
         table.heading("matiere", text="Matiere id")
-        table.heading("salle", text="Salle id")
+        table.heading("salle", text="Salle libelle")
         table.heading("dateSeance", text="Date Seance")
 
         table.pack(fill="both", expand=True)
-
+        ar = []
         for i in self.get_data_from_json():
+            i["salle"] = self.get_libelle_from_id(i["salle"])
+            ar.append(i)
+        for i in ar:
             table.insert(parent="", index="end", values=list(i.values()))
 
     def close_current_window(self, choice):
@@ -179,6 +183,8 @@ class Home(ctk.CTk):
         elif choice == "Afficher salles":
             AfficherSalle().mainloop()
         elif choice == "Afficher séance":
+            AfficherSeance().mainloop()
+        elif choice == "Afficher matière":
             AfficherMatiere().mainloop()
 
     def get_data_entry_check(self):
@@ -188,7 +194,11 @@ class Home(ctk.CTk):
             Seance.supprimerSeance(value)
             error.place_forget()
             table.delete(*table.get_children())
+            ar = []
             for i in self.get_data_from_json():
+                i["salle"] = self.get_libelle_from_id(i["salle"])
+                ar.append(i)
+            for i in ar:
                 table.insert(parent="", index="end", values=list(i.values()))
         else:
             error.place(relx=0.5, y=110, anchor="center")
@@ -278,7 +288,13 @@ class Home(ctk.CTk):
                     final[4],
                 )
                 table.delete(*table.get_children())
+                # for i in self.get_data_from_json():
+                #     table.insert(parent="", index="end", values=list(i.values()))
+                ar = []
                 for i in self.get_data_from_json():
+                    i["salle"] = self.get_libelle_from_id(i["salle"])
+                    ar.append(i)
+                for i in ar:
                     table.insert(parent="", index="end", values=list(i.values()))
             except:
                 print("final list error")
@@ -544,6 +560,13 @@ class Home(ctk.CTk):
     def get_data(self, value):
         with open("./data.json", "r") as f:
             return json.load(f)[value]
+
+    def get_libelle_from_id(self, id):
+        with open("./data.json", "r") as f:
+            data = json.load(f)["salles"]
+        for i in data:
+            if i["idSalle"] == id:
+                return i["libelle"]
 
 
 # Home().mainloop()

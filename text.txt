@@ -24,7 +24,3 @@
 une colonne d’action ou on déposera deux boutons « supprimer » et « modifier » le
 premier supprimera la séance sélectionnée et le deuxième modifiera les informations
 de la séance
-
-
-
-chouf adam ana inxaaah 3andi mtihan nhar tlat walihada ana khesni nraja3 men daba kifax nekhdem f bles fichier chni houma les collections mouhim nraja3 les expressions regulieres etc...

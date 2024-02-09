@@ -2,9 +2,6 @@ import json
 import re
 
 
-# Declaring all the classes
-
-
 # class Matiere
 class Matiere:
     matieres = []
@@ -93,16 +90,6 @@ class Matiere:
         return f"La matiere de l'id {self.idMatiere} de libelle {self.libelle}, et de langue {self.langue}"
 
 
-matiereOne = Matiere("fr1230", "pour la langue francaise", "Francais")
-matiereTwo = Matiere("en500", "english course", "English")
-# matiereThree = Matiere("ar400", "arabic course", "Arabic")
-
-# Matiere.ajouterMatiere("ger123", "pour la langue germnay", "Germany")
-# Matiere.mofidierMatiere("ger123", "ger5500", "Pour la langue germany", "germany")
-
-# print(Matiere.matieres)
-
-
 class Salle:
     salles = []
 
@@ -188,15 +175,6 @@ class Salle:
         return f"la salle de l'id {self.idSalle} de libelle {self.libelle}, et de numero {self.numero}"
 
 
-# saleOne = Salle.ajouterSalle("salleE", "pour la salle E", 80)
-# saleTwo = Salle.ajouterSalle("salleJ", "pour la salle j", "math")
-# saleThree = Salle.ajouterSalle("salleH", "pour la salle h", "pc")
-# Salle.ajouterSalle("salleA", "pour la salle B", 60)
-# Salle.mofidierSalle("salleA", "salleA+", "Pour la salle A+", 62)
-
-# print(Salle.salles)
-
-
 class Person:
     personnes = []
 
@@ -255,11 +233,6 @@ class Person:
         )
 
 
-# a = Person("jeniah", "adam", "kb243538")
-
-# print(Person.personnes)
-
-
 class Apprenant(Person):
     apprenants = []
 
@@ -305,13 +278,6 @@ class Apprenant(Person):
     @age.setter
     def age(self, value):
         self.__age = value
-
-
-# b = Apprenant("jeniah", "nom", "kb243538", "B1", 19)
-# b.mofidierApprenant("kb243538", "jeniahA", "adam", "kb243538", "B1", 19)
-# e = Apprenant("biba", "Anas", "kb243538", "B1", 19)
-# Apprenant.supprimerApprenant("kb243538")
-# print(Apprenant.apprenants)
 
 
 class Professeur(Person):
@@ -388,14 +354,6 @@ class Professeur(Person):
         self.__matricule = value
 
 
-l = Professeur.ajouterProfesseur("jeniah", "adam", "kb243538", "dev", "1234")
-m = Professeur.ajouterProfesseur("mrabet", "anas", "kb243348", "pc", "7600")
-last = Professeur.ajouterProfesseur(
-    "mbape", "jeniah", "123riyah", "ball", "kooraforlife"
-)
-# print(l.matricule)
-
-
 class Responsable(Person):
     responsables = []
 
@@ -449,11 +407,6 @@ class Responsable(Person):
     @matricule.setter
     def matricule(self, value):
         self.__matricule = value
-
-
-# x = Responsable("jeniah", "adam", "kb243538", "biba", "1234")
-
-# print(x.responsabilite)
 
 
 class Utilisateur:
@@ -532,18 +485,6 @@ class Utilisateur:
     @email.setter
     def email(self, value):
         self.__email = value
-
-
-# utilOne = Utilisateur("adam04", "123456", "jeniahadam@gmail.com")
-# utileTwo = Utilisateur("med07", "789456", "med@gmail.com")
-# utileThre = Utilisateur("jeniah", "7500", "jeniah7500@gmail.com")
-# utileFoor = Utilisateur("mosaab", "5550", "mosaab5550@gmail.com")
-# utileFive = Utilisateur.ajouterUtilisateur("mohamed", "4444", "mohamed4444@gmail.com")
-# utileSix = Utilisateur.ajouterUtilisateur("Yasser", "3333", "yasser3333@gmail.com")
-
-# Utilisateur.supprimerUtilisateur("mosaab")
-# Utilisateur.supprimerUtilisateur("jeniah")
-# print(Utilisateur.authentifier("med07", "789456"))
 
 
 class Seance:
@@ -680,28 +621,3 @@ class Seance:
 
     def __str__(self):
         return f"la seance de l'id {self.idSeance}, de professeur {self.professeur}, de matiere {self.matiere}, dans la salle {self.matiere}, et dans le {self.dateSeance}"
-
-
-# f = Seance("fSeance", l, matiereOne, saleOne, "24/06/2024")
-# g = Seance("gSeance", l, matiereTwo, saleTwo, "25/06/2024")
-# n = Seance("nSeance", m, matiereOne, saleThree, "30/07/2024")
-# m = Seance("mSeance", m, matiereOne, saleThree, "23/05/2024")
-# scd = Seance.ajouterSeance("secondSeance", last, matiereTwo, saleThree, "20/25/2024")
-
-# lt = Seance.ajouterSeance("lstSeanct", l, matiereOne, saleThree, "05/02/2024")
-
-
-# Les interfaces graphique
-
-# 1. Interface Authentification :
-
-import tkinter as tk
-from tkinter.font import Font
-import customtkinter as ctk
-from tkinter import ttk
-
-ctk.set_appearance_mode("light")
-ctk.set_default_color_theme("dark-blue")
-
-
-# from login import Login

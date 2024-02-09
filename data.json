@@ -1,11 +1,6 @@
 {
   "utilisateurs": [
     {
-      "login": "newTest",
-      "password": "test12",
-      "email": "test@gmail.com"
-    },
-    {
       "login": "adam04",
       "password": "123456",
       "email": "adam@gmail.com"
@@ -18,18 +13,25 @@
   ],
   "seances": [
     {
-      "idSeance": "biba",
-      "professeur": "prog123",
-      "matiere": "newId",
-      "salle": "salleM",
-      "dateSeance": "03/05/2024"
-    },
-    {
-      "idSeance": "final",
-      "professeur": "prog123",
+      "idSeance": "adam",
+      "professeur": "adam04",
       "matiere": "good",
       "salle": "salleM",
-      "dateSeance": "03/10/2024"
+      "dateSeance": "02/20/2024"
+    },
+    {
+      "idSeance": "result",
+      "professeur": "adam04",
+      "matiere": "newId",
+      "salle": "salleM",
+      "dateSeance": "05/20/2024"
+    },
+    {
+      "idSeance": "seancePrograming",
+      "professeur": "adam04",
+      "matiere": "newId",
+      "salle": "salleM",
+      "dateSeance": "02/22/2024"
     }
   ],
   "professeurs": [
@@ -46,6 +48,13 @@
       "cin": "kb5500",
       "filiere": "programing",
       "matricule": "prog123"
+    },
+    {
+      "nom": "adam",
+      "prenom": "jeniah",
+      "cin": "programing",
+      "filiere": "kb243538",
+      "matricule": "adam04"
     }
   ],
   "matieres": [
@@ -70,6 +79,31 @@
       "idSalle": "salleM",
       "libelle": "salle math",
       "numero": "5000"
+    }
+  ],
+  "apprenants": [
+    {
+      "nom": "jeniah",
+      "prenom": "adam",
+      "cin": "kb243538",
+      "niveau": "2anne",
+      "age": 19
+    },
+    {
+      "nom": "jeniah",
+      "prenom": "prenom",
+      "cin": "kb248",
+      "niveau": "2anne",
+      "age": 19
+    }
+  ],
+  "responsables": [
+    {
+      "nom": "mohamed",
+      "prenom": "jeniah",
+      "cin": "kb234",
+      "responsabilite": "etudiant",
+      "matricule": "1234"
     }
   ]
 }

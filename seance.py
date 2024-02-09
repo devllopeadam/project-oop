@@ -11,9 +11,9 @@ class Seance:
         self.__matiere = matiere
         self.__salle = salle
         self.__datSeance = dateSeance
-        with open("./data.json", "r") as file:
-            ar = json.load(file)["seances"]
-            # print(ar)
+        # with open("./data.json", "r") as file:
+        #     ar = json.load(file)["seances"]
+        #     # print(ar)
         Seance.seances.append(
             {
                 "idSeance": idSeance,
