@@ -1,4 +1,4 @@
-from person import Person
+from classes.person import Person
 import json
 
 
@@ -39,18 +39,19 @@ class Apprenant(Person):
         with open("./data.json", "r") as f:
             data = json.load(f)
         ar = data["apprenants"]
-        for i in ar:
-            if i["cin"] != cin:
-                print(i)
-                ar.append(
-                    {
-                        "nom": nom,
-                        "prenom": prenom,
-                        "cin": cin,
-                        "niveau": niveau,
-                        "age": age,
-                    }
-                )
+        cins = [i["cin"] for i in ar]
+
+        # for filtring the new data is the same to the old data
+        if cin not in cins:
+            ar.append(
+                {
+                    "nom": nom,
+                    "prenom": prenom,
+                    "cin": cin,
+                    "niveau": niveau,
+                    "age": age,
+                }
+            )
 
         data["apprenants"] = ar
         with open("./data.json", "w") as f:

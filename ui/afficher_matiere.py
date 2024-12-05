@@ -4,7 +4,7 @@ from tkinter import ttk
 
 ctk.set_appearance_mode("light")
 
-from matiere import Matiere
+from classes.matiere import Matiere
 
 
 class AfficherMatiere(ctk.CTk):

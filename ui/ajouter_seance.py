@@ -3,7 +3,7 @@ import customtkinter as ctk
 
 ctk.set_appearance_mode("light")
 
-from seance import Seance
+from classes.seance import Seance
 
 
 class AjouterSeance(ctk.CTk):

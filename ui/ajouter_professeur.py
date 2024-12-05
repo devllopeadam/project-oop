@@ -1,7 +1,7 @@
 import json
 import customtkinter as ctk
 
-from professeur import Professeur
+from classes.professeur import Professeur
 
 ctk.set_appearance_mode("light")
 

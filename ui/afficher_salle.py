@@ -4,7 +4,7 @@ from tkinter import ttk
 
 ctk.set_appearance_mode("light")
 
-from salle import Salle
+from classes.salle import Salle
 
 
 class AfficherSalle(ctk.CTk):

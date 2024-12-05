@@ -1,9 +1,16 @@
+import sys
+import os
+
+# Add the parent directory of 'classes' to sys.path
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(parent_dir)
+
 import customtkinter as ctk
+from classes.utilisateur import Utilisateur
+from acceuil import Home
+
 
 ctk.set_appearance_mode("light")
-
-from utilisateur import Utilisateur
-from acceuil import Home
 
 
 class Login(ctk.CTk):
@@ -20,13 +27,13 @@ class Login(ctk.CTk):
         login_title = ctk.CTkLabel(
             self,
             text="Login",
-            font=("Verdana", 30, "bold"),
-            text_color=("#1d3557", "white"),
+            font=(Login.font, 30, "bold"),
+            text_color=(Login.color, "white"),
         )
         login_title.pack(pady=30)
 
         # the inputs
-        input_frame = ctk.CTkFrame(self, width=400, height=450, fg_color="#f0efef")
+        input_frame = ctk.CTkFrame(self, width=400, height=400, fg_color="#f0efef")
         input_frame.pack(pady=20, ipady=30)
         self.make_input(input_frame)
 
@@ -113,7 +120,7 @@ class Login(ctk.CTk):
     def submit(self):
         get_login = login_value.get()
         get_password = password_value.get()
-        colorInvalid = "#FF3333"
+        colorInvalid = "#ff3333"
         try:
             if Utilisateur.authentifier(get_login, get_password) == True:
                 self.destroy()

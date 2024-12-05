@@ -1,10 +1,14 @@
 import json
+from pymongo import *
 
 
 class Utilisateur:
-    utils = []
+    client = MongoClient(
+        "mongodb://localhost:27017/"
+    )  # Replace with your MongoDB connection string
+    db = client["center-formation"]  # Database name
+    collection = db["utilisateurs"]  # Collection name
 
-    # Write the new data to the JSON file
     def __init__(self, login, password, email):
         self.__login = login
         self.__password = password
@@ -37,12 +41,13 @@ class Utilisateur:
     def ajouterUtilisateur(cls, login, password, email):
         with open("./data.json", "r") as f:
             data = json.load(f)
-
         ar = data["utilisateurs"]
+        # logins = [i["login"] for i in ar]
+        # for filtring the new data is the same to the old data
+        # if login not in logins:
         ar.append({"login": login, "password": password, "email": email})
 
         data["utilisateurs"] = ar
-
         with open("./data.json", "w") as f:
             json.dump(data, f, indent=2)
 
@@ -53,8 +58,8 @@ class Utilisateur:
         for i in ar:
             if i["login"] == login:
                 i["login"] = newLogin
-                i["password"] == newPassword
-                i["email"] == newEmail
+                i["password"] = newPassword
+                i["email"] = newEmail
 
         with open("./data.json", "r") as file:
             data = json.load(file)

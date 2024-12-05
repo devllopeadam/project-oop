@@ -1,4 +1,4 @@
-from person import Person
+from classes.person import Person
 import json
 
 
@@ -44,15 +44,18 @@ class Responsable(Person):
         with open("./data.json", "r") as f:
             data = json.load(f)
         ar = data["responsables"]
-        ar.append(
-            {
-                "nom": nom,
-                "prenom": prenom,
-                "cin": cin,
-                "responsabilite": responsabilite,
-                "matricule": matricule,
-            }
-        )
+        matricules = [i["matricule"] for i in ar]
+        # for filtring the new data is the same to the old data
+        if matricule not in matricules:
+            ar.append(
+                {
+                    "nom": nom,
+                    "prenom": prenom,
+                    "cin": cin,
+                    "responsabilite": responsabilite,
+                    "matricule": matricule,
+                }
+            )
 
         data["responsables"] = ar
         with open("./data.json", "w") as f:
@@ -95,4 +98,4 @@ class Responsable(Person):
         self.__matricule = value
 
 
-s = Responsable.ajouterResponsable("mohamed", "jeniah", "kb234", "etudiant", "1234")
+# s = Responsable.ajouterResponsable("mohamed", "jeniah", "kb234", "etudiant", "1234")r

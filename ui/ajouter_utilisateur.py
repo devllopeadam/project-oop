@@ -2,7 +2,7 @@ import json
 import re
 import customtkinter as ctk
 
-from utilisateur import Utilisateur
+from classes.utilisateur import Utilisateur
 
 
 ctk.set_appearance_mode("light")

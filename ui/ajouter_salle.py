@@ -3,23 +3,23 @@ import customtkinter as ctk
 
 ctk.set_appearance_mode("light")
 
-from matiere import Matiere
+from classes.salle import Salle
 
 
-class AjouterMatiere(ctk.CTk):
+class AjouterSalle(ctk.CTk):
     font = "Verdana"
     color = "#1d3557"
 
     def __init__(self):
         super().__init__()
-        self.title("Ajouter matiere")
+        self.title("Ajouter Salle")
         self.geometry("600x550+530+50")
         self.iconbitmap("./images/login_icon.ico")
         self.resizable(False, False)
 
         title_window = ctk.CTkLabel(
             self,
-            text="Ajouter Matiere",
+            text="Ajouter Salle",
             font=(self.font, 25, "bold"),
             text_color=self.color,
         )
@@ -29,7 +29,7 @@ class AjouterMatiere(ctk.CTk):
     def check_ajouter(self):
         final = []
 
-        ids = [i["idMatiere"] for i in self.get_data_from_json()]
+        ids = [i["idSalle"] for i in self.get_data_from_json()]
         # for the id
         if value_id.get() == "":
             error_id.place(x=330, y=23)
@@ -46,14 +46,14 @@ class AjouterMatiere(ctk.CTk):
             error_libelle.place_forget()
             final.append(value_libelle.get())
         # for the langue
-        if value_langue.get() == "":
-            error_langue.place(x=330, y=223)
+        if value_numero.get() == "":
+            error_numero.place(x=330, y=223)
         else:
-            error_langue.place_forget()
-            final.append(value_langue.get())
+            error_numero.place_forget()
+            final.append(value_numero.get())
 
         if len(final) != 0:
-            Matiere.ajouterMatiere(final[0], final[1], final[2])
+            Salle.ajouterSalle(final[0], final[1], final[2])
 
     def create_entries_frame(self):
         frame = ctk.CTkFrame(self, width=450, height=450, fg_color="#F1F1F1")
@@ -61,7 +61,7 @@ class AjouterMatiere(ctk.CTk):
 
         # for the id
         label_id = ctk.CTkLabel(
-            frame, text="Id matiere:", font=(self.font, 17), text_color=self.color
+            frame, text="Id salle:", font=(self.font, 17), text_color=self.color
         )
         global value_id
         value_id = ctk.StringVar()
@@ -113,32 +113,32 @@ class AjouterMatiere(ctk.CTk):
         label_libelle.place(x=30, y=100)
         entry_libelle.pack(pady=20)
 
-        # for the langued
-        label_langue = ctk.CTkLabel(
-            frame, text="Langue:", font=(self.font, 17), text_color=self.color
+        # for the numero
+        label_numero = ctk.CTkLabel(
+            frame, text="Numero:", font=(self.font, 17), text_color=self.color
         )
-        global value_langue
-        value_langue = ctk.StringVar()
-        entry_langue = ctk.CTkEntry(
+        global value_numero
+        value_numero = ctk.StringVar()
+        entry_numero = ctk.CTkEntry(
             frame,
-            textvariable=value_langue,
+            textvariable=value_numero,
             height=38,
             width=400,
             border_width=0,
             font=(self.font, 13),
             text_color=self.color,
         )
-        global error_langue
-        error_langue = ctk.CTkLabel(
+        global error_numero
+        error_numero = ctk.CTkLabel(
             frame,
             text="cannot be empty",
             text_color="#FF0033",
             font=(self.font, 11),
             height=5,
         )
-        error_langue.place_forget()
-        label_langue.place(x=30, y=200)
-        entry_langue.pack(pady=40)
+        error_numero.place_forget()
+        label_numero.place(x=30, y=200)
+        entry_numero.pack(pady=40)
 
         # for the button
 
@@ -157,7 +157,7 @@ class AjouterMatiere(ctk.CTk):
 
     def get_data_from_json(self):
         with open("./data.json", "r") as f:
-            return json.load(f)["matieres"]
+            return json.load(f)["salles"]
 
 
-# AjouterMatiere().mainloop()
+# AjouterSalle().mainloop()

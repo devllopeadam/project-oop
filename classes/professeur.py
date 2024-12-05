@@ -1,6 +1,6 @@
 import json
-from person import Person
-from seance import Seance
+from classes.person import Person
+from classes.seance import Seance
 
 
 class Professeur(Person):

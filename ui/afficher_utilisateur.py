@@ -4,7 +4,7 @@ from tkinter import ttk
 
 ctk.set_appearance_mode("light")
 
-from utilisateur import Utilisateur
+from classes.utilisateur import Utilisateur
 
 
 class AfficherUtilisateur(ctk.CTk):
@@ -290,3 +290,8 @@ class AfficherUtilisateur(ctk.CTk):
     def get_data_from_json(self):
         with open("./data.json", "r") as f:
             return json.load(f)["utilisateurs"]
+
+
+Utilisateur.mofidierUtilisateur(
+    "devllopeadam", "devlopper", "dev123", "devlopper@gmail.com"
+)

@@ -1,30 +1,18 @@
 {
   "utilisateurs": [
     {
-      "login": "adam04",
-      "password": "123456",
-      "email": "adam@gmail.com"
-    },
-    {
-      "login": "moiz",
-      "password": "moiz123",
-      "email": "moiz@gmail.com"
+      "username": "programmer",
+      "password": "programmer1234",
+      "email": "programmer@gmail.com"
     }
   ],
   "seances": [
     {
-      "idSeance": "adam",
-      "professeur": "adam04",
+      "idSeance": "test",
+      "professeur": "asdf",
       "matiere": "good",
       "salle": "salleM",
-      "dateSeance": "02/20/2024"
-    },
-    {
-      "idSeance": "result",
-      "professeur": "adam04",
-      "matiere": "newId",
-      "salle": "salleM",
-      "dateSeance": "05/20/2024"
+      "dateSeance": "02/21/2024"
     },
     {
       "idSeance": "seancePrograming",
@@ -32,12 +20,19 @@
       "matiere": "newId",
       "salle": "salleM",
       "dateSeance": "02/22/2024"
+    },
+    {
+      "idSeance": "45",
+      "professeur": "asdf",
+      "matiere": "newId",
+      "salle": "salleM",
+      "dateSeance": "05/20/2024"
     }
   ],
   "professeurs": [
     {
-      "nom": "Nadia",
-      "prenom": "elazhari",
+      "nom": "ans",
+      "prenom": "ans",
       "cin": "kl1414",
       "filiere": "khiyata",
       "matricule": "khiyata400"
@@ -55,6 +50,13 @@
       "cin": "programing",
       "filiere": "kb243538",
       "matricule": "adam04"
+    },
+    {
+      "nom": "test",
+      "prenom": "sd",
+      "cin": "asdfa",
+      "filiere": "asdfasd",
+      "matricule": "asdf"
     }
   ],
   "matieres": [
@@ -74,11 +76,6 @@
       "idSalle": "newSalle",
       "libelle": "math",
       "numero": 7000
-    },
-    {
-      "idSalle": "salleM",
-      "libelle": "salle math",
-      "numero": "5000"
     }
   ],
   "apprenants": [

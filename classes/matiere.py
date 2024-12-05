@@ -1,5 +1,5 @@
 import json
-from seance import Seance
+from classes.seance import Seance
 
 
 class Matiere:

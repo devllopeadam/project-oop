@@ -4,7 +4,9 @@ from tkinter import ttk
 
 ctk.set_appearance_mode("light")
 
-from professeur import Professeur
+from classes.professeur import Professeur
+
+# from acceuil import Home
 
 
 class AfficherProfesseur(ctk.CTk):
