@@ -1,11 +1,13 @@
 import json
 import customtkinter as ctk
 from tkinter import ttk
+from pymongo import *
 
-ctk.set_appearance_mode("light")
 
 from classes.salle import Salle
-
+client = MongoClient("mongodb://localhost:27017/")
+db = client["center-formation"]
+collection = db["salles"]
 
 class AfficherSalle(ctk.CTk):
     font = "Verdana"
@@ -60,7 +62,7 @@ class AfficherSalle(ctk.CTk):
 
     def check_delete(self):
         final = []
-        ids = [i["idSalle"] for i in self.get_data_from_json()]
+        ids = [i["_id"] for i in self.get_data_from_json()]
 
         if value_idSalle.get() == "" or value_idSalle.get() == "entre votre idSalle":
             error_idSalle.configure(text="cannot be empty")
@@ -77,13 +79,13 @@ class AfficherSalle(ctk.CTk):
 
     def modification(self):
         final = []
-        ids = [i["idSalle"] for i in self.get_data_from_json()]
+        ids = [i["_id"] for i in self.get_data_from_json()]
         newId = value_newId.get()
         libelle = value_libelle.get()
         numero = value_numero.get()
         arI = []
         for i in self.get_data_from_json():
-            if i["idSalle"] != value_idSalle_modi.get():
+            if i["_id"] != value_idSalle_modi.get():
                 arI.append(i["idSalle"])
 
         if (
@@ -284,5 +286,4 @@ class AfficherSalle(ctk.CTk):
         button_modification.pack(pady=20)
 
     def get_data_from_json(self):
-        with open("./data.json", "r") as f:
-            return json.load(f)["salles"]
+        return list(collection.find())

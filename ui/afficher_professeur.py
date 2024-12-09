@@ -1,12 +1,16 @@
 import json
 import customtkinter as ctk
 from tkinter import ttk
+from pymongo import *
 
 ctk.set_appearance_mode("light")
 
 from classes.professeur import Professeur
 
 # from acceuil import Home
+client = MongoClient("mongodb://localhost:27017/")
+db = client["center-formation"]
+collection = db["professeurs"]
 
 
 class AfficherProfesseur(ctk.CTk):
@@ -44,7 +48,7 @@ class AfficherProfesseur(ctk.CTk):
         global table
         table = ttk.Treeview(
             frame,
-            columns=("nom", "prenom", "cin", "filiere", "matricule"),
+            columns=("nom", "prenom", "cin", "filiere"),
             style="Custom.Treeview",
             show="headings",
         )
@@ -52,17 +56,15 @@ class AfficherProfesseur(ctk.CTk):
         table.heading("prenom", text="Prenom")
         table.heading("cin", text="Cin")
         table.heading("filiere", text="Filiere")
-        table.heading("matricule", text="Matricule")
 
         table.column("nom", anchor="center")
         table.column("prenom", anchor="center")
         table.column("cin", anchor="center")
         table.column("filiere", anchor="center")
-        table.column("matricule", anchor="center")
         table.pack(fill="both", expand=True)
 
         for i in self.get_data_from_json():
-            table.insert(parent="", index="end", values=list(i.values()))
+            table.insert(parent="", index="end", values=list(i.values())[1:])
 
     def check_delete(self):
         cins = [i["cin"] for i in self.get_data_from_json()]
@@ -77,7 +79,7 @@ class AfficherProfesseur(ctk.CTk):
             Professeur.supprimerProfesseur(value)
             table.delete(*table.get_children())
             for i in self.get_data_from_json():
-                table.insert(parent="", index="end", values=list(i.values()))
+                table.insert(parent="", index="end", values=list(i.values())[1:])
             error_cin.place_forget()
 
     def modification(self):
@@ -87,16 +89,12 @@ class AfficherProfesseur(ctk.CTk):
         valuePrenom = value_prenom.get()
         newCin = value_new_cin.get()
         valueFiliere = value_filiere.get()
-        valueMatricule = value_matricule.get()
         cins = [i["cin"] for i in self.get_data_from_json()]
         arP = []
         arC = []
         for i in self.get_data_from_json():
             if i["cin"] != valueCin:
                 arC.append(i["cin"])
-        for i in self.get_data_from_json():
-            if i["cin"] != valueCin:
-                arP.append(i["matricule"])
 
         if valueCin == "" or valueCin == "entre votre cin":
             error_old_cin.configure(text="cannot be empty")
@@ -137,23 +135,13 @@ class AfficherProfesseur(ctk.CTk):
                 error_filiere.place_forget()
                 final.append(valueFiliere)
 
-            # for the matricule
-            if valueMatricule == "" or valueMatricule == "entre votre matricule":
-                error_matricule.place(x=155, y=550)
-            elif valueMatricule in arP:
-                error_matricule.configure(text="always exist")
-                error_matricule.place(x=175, y=550)
-            elif valueMatricule not in arP:
-                error_matricule.place_forget()
-                final.append(valueMatricule)
-
             try:
                 Professeur.mofidierProfesseur(
                     valueCin, final[0], final[1], final[2], final[3], final[4]
                 )
                 table.delete(*table.get_children())
                 for i in self.get_data_from_json():
-                    table.insert(parent="", index="end", values=list(i.values()))
+                    table.insert(parent="", index="end", values=list(i.values())[1:])
             except:
                 print("final list error")
 
@@ -295,28 +283,6 @@ class AfficherProfesseur(ctk.CTk):
         entry_filiere.insert(index=ctk.END, string="entre votre filiere")
         entry_filiere.pack(pady=40)
 
-        # for the matricule
-
-        global value_matricule
-        value_matricule = ctk.StringVar()
-        entry_matricule = ctk.CTkEntry(
-            frame,
-            width=200,
-            height=35,
-            font=(self.font, 13),
-            textvariable=value_matricule,
-        )
-        global error_matricule
-        error_matricule = ctk.CTkLabel(
-            frame,
-            text="cannot be empty",
-            text_color="#FF0033",
-            height=5,
-        )
-        error_matricule.place_forget()
-        entry_matricule.insert(index=ctk.END, string="entre votre matricule")
-        entry_matricule.pack()
-
         # for the button modification
 
         button_modification = ctk.CTkButton(
@@ -332,8 +298,7 @@ class AfficherProfesseur(ctk.CTk):
         button_modification.pack(pady=20)
 
     def get_data_from_json(self):
-        with open("./data.json", "r") as f:
-            return json.load(f)["professeurs"]
+        return list(collection.find())
 
 
 # AfficherProfesseur().mainloop()

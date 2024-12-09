@@ -1,10 +1,13 @@
 import json
 import customtkinter as ctk
+from pymongo import *
 
 ctk.set_appearance_mode("light")
 
 from classes.seance import Seance
-
+client = MongoClient("mongodb://localhost:27017/")
+db = client["center-formation"]
+collection = db["utilisateurs"]
 
 class AjouterSeance(ctk.CTk):
     font = "Verdana"
@@ -266,8 +269,7 @@ class AjouterSeance(ctk.CTk):
         ajouter_button.configure(cursor="hand2")
 
     def get_data_from_json(self):
-        with open("./data.json", "r") as f:
-            return json.load(f)["seances"]
+        return list(collection.find())
 
 
 # AjouterSeance().mainloop()

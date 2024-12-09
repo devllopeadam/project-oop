@@ -1,30 +1,28 @@
+from pymongo import MongoClient
+
 class Person:
-    personnes = []
+    client = MongoClient("mongodb://localhost:27017/")
+    db = client["center-formation"]
+    collection = db["personnes"]
 
     def __init__(self, nom, prenom, cin):
         self._nom = nom
         self._prenom = prenom
         self._cin = cin
-        Person.personnes.append({"nom": nom, "prenom": prenom, "cin": cin})
 
-    # to delete a salle from the personnes list
-
-    def supprimerPerson(cin):
-        for i in Person.personnes:
-            if i["cin"] == cin:
-                Person.personnes.remove(i)
+    @classmethod
+    def supprimerPerson(cls, cin):
+        cls.collection.delete_one({"cin": cin})
 
     @classmethod
     def ajouterPerson(cls, nom, prenom, cin):
-        return cls(nom, prenom, cin)
+        cls.collection.insert_one({"cin": cin, "nom": nom, "prenom": prenom})
 
     @classmethod
     def mofidierPerson(cls, cin, newNom, newPrenom, newCin):
-        for i in Person.personnes:
-            if i["cin"] == cin:
-                i["nom"] = newNom
-                i["prenom"] = newPrenom
-                i["cin"] = newCin
+        cls.collection.update_one(
+            {"cin": cin}, {"$set": {"nom": newNom, "prenom": newPrenom, "cin": newCin}}
+        )
 
     @property
     def nom(self):

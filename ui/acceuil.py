@@ -567,6 +567,3 @@ class Home(ctk.CTk):
         for i in data:
             if i["idSalle"] == id:
                 return i["libelle"]
-
-
-# Home().mainloop()

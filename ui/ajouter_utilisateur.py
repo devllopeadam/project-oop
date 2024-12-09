@@ -1,11 +1,13 @@
-import json
 import re
 import customtkinter as ctk
-
 from classes.utilisateur import Utilisateur
+from pymongo import *
 
 
 ctk.set_appearance_mode("light")
+client = MongoClient("mongodb://localhost:27017/")
+db = client["center-formation"]
+collection = db["utilisateurs"]
 
 
 class AjouterUtilisateur(ctk.CTk):
@@ -30,32 +32,28 @@ class AjouterUtilisateur(ctk.CTk):
         self.create_entries_frame()
 
     def check_ajouter(self):
-        logins = [i["login"] for i in self.get_data_from_json()]
-        passwords = [i["password"] for i in self.get_data_from_json()]
+        usernames = [i["username"] for i in self.get_data_from_json()]
         emails = [i["email"] for i in self.get_data_from_json()]
-        login = value_login.get()
+        username = value_username.get()
         password = value_password.get()
         email = value_email.get()
         final = []
 
-        # for the login validation
-        if login == "":
-            error_login.configure(text="cannot be empty")
-            error_login.place(x=325, y=10)
-        elif login in logins:
-            error_login.configure(text="login always exist")
-            error_login.place(x=320, y=10)
+        # for the username validation
+        if username == "":
+            error_username.configure(text="cannot be empty")
+            error_username.place(x=325, y=10)
+        elif username in usernames:
+            error_username.configure(text="username always exist")
+            error_username.place(x=310, y=10)
         else:
-            error_login.place_forget()
-            final.append(login)
+            error_username.place_forget()
+            final.append(username)
 
         # for the password validation
         if password == "":
             error_password.configure(text="cannot be empty")
             error_password.place(y=112, x=325)
-        elif password in passwords:
-            error_password.configure(text="password always exist")
-            error_password.place(y=112, x=296)
         else:
             error_password.place_forget()
             final.append(password)
@@ -74,38 +72,39 @@ class AjouterUtilisateur(ctk.CTk):
             final.append(email)
 
         Utilisateur.ajouterUtilisateur(final[0], final[1], final[2])
+        self.destroy()
 
     def create_entries_frame(self):
         frame = ctk.CTkFrame(self, width=450, height=500, fg_color="#F1F1F1")
         frame.pack(pady=20, ipadx=30, ipady=20)
 
-        # for the login entry
-        label_login = ctk.CTkLabel(
-            frame, text="Login:", font=(self.font, 17), text_color=self.color
+        # for the username entry
+        label_username = ctk.CTkLabel(
+            frame, text="username:", font=(self.font, 17), text_color=self.color
         )
-        global value_login
-        value_login = ctk.StringVar()
-        entry_login = ctk.CTkEntry(
+        global value_username
+        value_username = ctk.StringVar()
+        entry_username = ctk.CTkEntry(
             frame,
-            textvariable=value_login,
+            textvariable=value_username,
             height=38,
             width=400,
             border_width=0,
             font=(self.font, 13),
             text_color=self.color,
         )
-        global error_login
-        error_login = ctk.CTkLabel(
+        global error_username
+        error_username = ctk.CTkLabel(
             frame,
-            text="login always exist",
+            text="username always exist",
             text_color="#FF0033",
             font=(self.font, 11),
             height=5,
         )
-        label_login.place(x=25, y=-5)
-        # error_login.place(x=320, y=10)
-        error_login.place_forget()
-        entry_login.pack(pady=30)
+        label_username.place(x=25, y=-5)
+        # error_username.place(x=320, y=10)
+        error_username.place_forget()
+        entry_username.pack(pady=30)
 
         # for the password
 
@@ -180,8 +179,4 @@ class AjouterUtilisateur(ctk.CTk):
         ajouter_button.configure(cursor="hand2")
 
     def get_data_from_json(self):
-        with open("./data.json", "r") as f:
-            return json.load(f)["utilisateurs"]
-
-
-# AjouterUtilisateur().mainloop()
+        return list(collection.find())

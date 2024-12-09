@@ -1,10 +1,14 @@
 import json
 import customtkinter as ctk
+from pymongo import *
 
 ctk.set_appearance_mode("light")
 
 from classes.salle import Salle
 
+client = MongoClient("mongodb://localhost:27017/")
+db = client["center-formation"]
+collection = db["salles"]
 
 class AjouterSalle(ctk.CTk):
     font = "Verdana"
@@ -29,7 +33,7 @@ class AjouterSalle(ctk.CTk):
     def check_ajouter(self):
         final = []
 
-        ids = [i["idSalle"] for i in self.get_data_from_json()]
+        ids = [i["_id"] for i in self.get_data_from_json()]
         # for the id
         if value_id.get() == "":
             error_id.place(x=330, y=23)
@@ -54,6 +58,7 @@ class AjouterSalle(ctk.CTk):
 
         if len(final) != 0:
             Salle.ajouterSalle(final[0], final[1], final[2])
+            self.destroy()
 
     def create_entries_frame(self):
         frame = ctk.CTkFrame(self, width=450, height=450, fg_color="#F1F1F1")
@@ -156,8 +161,7 @@ class AjouterSalle(ctk.CTk):
         ajouter_button.configure(cursor="hand2")
 
     def get_data_from_json(self):
-        with open("./data.json", "r") as f:
-            return json.load(f)["salles"]
+        return list(collection.find())
 
 
 # AjouterSalle().mainloop()
