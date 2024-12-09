@@ -1,9 +1,12 @@
-import json
 import customtkinter as ctk
+from pymongo import *
 
 ctk.set_appearance_mode("light")
 
 from classes.matiere import Matiere
+client = MongoClient("mongodb://localhost:27017/")
+db = client["center-formation"]
+collection = db["matieres"]
 
 
 class AjouterMatiere(ctk.CTk):
@@ -29,7 +32,7 @@ class AjouterMatiere(ctk.CTk):
     def check_ajouter(self):
         final = []
 
-        ids = [i["idMatiere"] for i in self.get_data_from_json()]
+        ids = [i["_id"] for i in self.get_data_from_json()]
         # for the id
         if value_id.get() == "":
             error_id.place(x=330, y=23)
@@ -156,8 +159,7 @@ class AjouterMatiere(ctk.CTk):
         ajouter_button.configure(cursor="hand2")
 
     def get_data_from_json(self):
-        with open("./data.json", "r") as f:
-            return json.load(f)["matieres"]
+        return list(collection.find())
 
 
 # AjouterMatiere().mainloop()

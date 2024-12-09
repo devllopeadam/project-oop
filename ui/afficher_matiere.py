@@ -1,11 +1,13 @@
-import json
 import customtkinter as ctk
 from tkinter import ttk
+from pymongo import *
 
 ctk.set_appearance_mode("light")
 
 from classes.matiere import Matiere
-
+client = MongoClient("mongodb://localhost:27017/")
+db = client["center-formation"]
+collection = db["matieres"]
 
 class AfficherMatiere(ctk.CTk):
     font = "Verdana"
@@ -58,7 +60,7 @@ class AfficherMatiere(ctk.CTk):
             table.insert(parent="", index="end", values=list(i.values()))
 
     def check_delete(self):
-        ids = [i["idMatiere"] for i in self.get_data_from_json()]
+        ids = [i["_id"] for i in self.get_data_from_json()]
         value = value_id.get()
         if value == "" or value == "entre votre id":
             error_id.configure(text="cannot be empty")
@@ -74,7 +76,7 @@ class AfficherMatiere(ctk.CTk):
             error_id.place_forget()
 
     def modification(self):
-        ids = [i["idMatiere"] for i in self.get_data_from_json()]
+        ids = [i["_id"] for i in self.get_data_from_json()]
         newId = value_entry_new_id.get()
         newLibelle = value_entry_new_libelle.get()
         newLangue = value_entry_new_langue.get()
@@ -83,8 +85,8 @@ class AfficherMatiere(ctk.CTk):
         arL = []
 
         for i in self.get_data_from_json():
-            if i["idMatiere"] != valueId:
-                arL.append(i["idMatiere"])
+            if i["_id"] != valueId:
+                arL.append(i["_id"])
 
         if valueId == "" or valueId == "Entre votre id":
             error_old_id.configure(text="cannot be empty")
@@ -271,5 +273,4 @@ class AfficherMatiere(ctk.CTk):
         button_modification.pack()
 
     def get_data_from_json(self):
-        with open("./data.json", "r") as f:
-            return json.load(f)["matieres"]
+        return list(collection.find())

@@ -1,114 +1,63 @@
-import json
+from pymongo import MongoClient
 from datetime import datetime
 
 
 class Seance:
-    seances = []
+    client = MongoClient("mongodb://localhost:27017/")
+    db = client["center-formation"]
+    collection = db["seances"]
 
-    def __init__(self, idSeance, professeur, matiere, salle, dateSeance):
+    def __init__(self, idSeance, prof_id, matiere_id, salle_id, dateSeance):
         self.__idSeance = idSeance
-        self.__professeur = professeur
-        self.__matiere = matiere
-        self.__salle = salle
-        self.__datSeance = dateSeance
-        # with open("./data.json", "r") as file:
-        #     ar = json.load(file)["seances"]
-        #     # print(ar)
-        Seance.seances.append(
-            {
-                "idSeance": idSeance,
-                "professeur": professeur["matricule"],
-                "matiere": matiere["idMatiere"],
-                "salle": salle["idSalle"],
-                "dateSeance": dateSeance,
-            }
-        )
-        with open("./data.json", "r") as file:
-            data = json.load(file)
-            data["seances"] = Seance.seances
+        self.__prof_id = prof_id
+        self.__matiere_id = matiere_id
+        self.__salle_id = salle_id
+        self.__dateSeance = dateSeance
 
-        with open("./data.json", "w") as file:
-            json.dump(data, file, indent=2)
-
-    # supprimer une seance
-    def supprimerSeance(idSeance):
-        with open("./data.json", "r") as file:
-            ar = json.load(file)["seances"]
-            for i in ar:
-                if i["idSeance"] == idSeance:
-                    ar.remove(i)
-
-        with open("./data.json", "r") as file:
-            data = json.load(file)
-        data["seances"] = ar
-
-        with open("./data.json", "w") as file:
-            json.dump(data, file, indent=2)
-
-    # ajouter une seance
     @classmethod
-    def ajouterSeance(cls, idSeance, professeur, matiere, salle, dateSeance):
-        with open("./data.json", "r") as f:
-            data = json.load(f)
-        ar = data["seances"]
-        ar.append(
+    def supprimerSeance(cls, idSeance):
+        result = cls.collection.delete_one({"_id": idSeance})
+        if result.deleted_count == 0:
+            raise ValueError(f"No seance found with id {idSeance}")
+
+    @classmethod
+    def ajouterSeance(cls, idSeance, prof_id, matiere_id, salle_id, dateSeance):
+        cls.collection.insert_one(
             {
-                "idSeance": idSeance,
-                "professeur": professeur["matricule"],
-                "matiere": matiere["idMatiere"],
-                "salle": salle["idSalle"],
+                "_id": idSeance,
+                "prof_id": prof_id,
+                "matiere_id": matiere_id,
+                "salle_id": salle_id,
                 "dateSeance": dateSeance,
             }
         )
 
-        data["seances"] = ar
-        with open("./data.json", "w") as f:
-            json.dump(data, f, indent=2)
-
-    # modifier une seance
     @classmethod
     def modifierSeance(
-        cls, idSeance, newIdSeance, newProfesseur, newMatiere, newSalle, newDateSeance
+        cls,
+        idSeance,
+        newDateSeance,
     ):
-        with open("./data.json", "r") as file:
-            ar = json.load(file)["seances"]
-        for i in ar:
-            if i["idSeance"] == idSeance:
-                i["idSeance"] = newIdSeance
-                i["professeur"] = newProfesseur["matricule"]
-                i["matiere"] = newMatiere["idMatiere"]
-                i["salle"] = newSalle["idSalle"]
-                i["dateSeance"] = newDateSeance
-
-        with open("./data.json", "r") as file:
-            data = json.load(file)
-            data["seances"] = ar
-        with open("./data.json", "w") as file:
-            json.dump(data, file, indent=2)
-
-    # afficher les séances attribuées à un professeur
-    @classmethod
-    def afficherSeanceProfesseur(cls, matricule):
-        ar = []
-        with open("./data.json", "r") as file:
-            data = json.load(file)
-            for i in data["seances"]:
-                if i["professeur"] == matricule:
-                    ar.append(i)
-        return ar
+        result = cls.collection.update_one(
+            {"_id": idSeance},
+            {
+                "$set": {
+                    "dateSeance": newDateSeance,
+                }
+            },
+        )
+        if result.matched_count == 0:
+            raise ValueError(f"No seance found with id {idSeance}")
 
     @classmethod
-    def afficherSalleDispo(cls, idSalle, date):
-        ar = []
-        with open("./data.json", "r") as file:
-            data = json.load(file)["seances"]
-        for i in data:
-            if i["salle"] == idSalle:
-                ar.append(i["dateSeance"])
-        if date in ar:
-            return True
-        else:
-            return False
+    def afficherSeanceProfesseur(cls, prof_id):
+        seances = cls.collection.find({"prof_id": prof_id})
+        return list(seances)
+
+    @classmethod
+    def afficherSalleDispo(cls, salle_id, date):
+        seance = cls.collection.find_one({"salle_id": salle_id, "dateSeance": date})
+        return seance is None
 
     @property
     def idSeance(self):
@@ -119,36 +68,40 @@ class Seance:
         self.__idSeance = value
 
     @property
-    def professeur(self):
-        return self.__professeur
+    def prof_id(self):
+        return self.__prof_id
 
-    @professeur.setter
-    def professeur(self, value):
-        self.__professeur = value
-
-    @property
-    def matiere(self):
-        return self.__matiere
-
-    @matiere.setter
-    def matiere(self, value):
-        self.__matiere = value
+    @prof_id.setter
+    def prof_id(self, value):
+        self.__prof_id = value
 
     @property
-    def salle(self):
-        return self.__salle
+    def matiere_id(self):
+        return self.__matiere_id
 
-    @salle.setter
-    def salle(self, value):
-        self.__salle = value
+    @matiere_id.setter
+    def matiere_id(self, value):
+        self.__matiere_id = value
+
+    @property
+    def salle_id(self):
+        return self.__salle_id
+
+    @salle_id.setter
+    def salle_id(self, value):
+        self.__salle_id = value
 
     @property
     def dateSeance(self):
-        return self.__datSeance
+        return self.__dateSeance
 
     @dateSeance.setter
     def dateSeance(self, value):
-        self.__datSeance = value
+        self.__dateSeance = value
 
     def __str__(self):
-        return f"la seance de l'id {self.idSeance}, de professeur {self.professeur}, de matiere {self.matiere}, dans la salle {self.matiere}, et dans le {self.dateSeance}"
+        return (
+            f"La séance avec l'id {self.idSeance}, professeur {self.prof_id}, "
+            f"matière {self.matiere_id}, dans la salle {self.salle_id}, "
+            f"est prévue le {self.dateSeance}."
+        )

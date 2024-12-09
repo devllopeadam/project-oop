@@ -1,109 +1,48 @@
-import json
-from classes.seance import Seance
+from pymongo import MongoClient
 
 
 class Matiere:
-    matieres = []
+    client = MongoClient("mongodb://localhost:27017/")
+    db = client["center-formation"]
+    collection = db["matieres"]
 
     def __init__(self, idMatiere, libelle, langue):
         self.__idMatiere = idMatiere
         self.__libelle = libelle
         self.__langue = langue
 
-        # Pour Lister Tout les matieres
+    @classmethod
+    def supprimerMatiere(cls, idMatiere):
+        cls.collection.delete_one({"_id": idMatiere})
 
-        Matiere.matieres.append(
-            {
-                "idMatiere": idMatiere,
-                "libelle": libelle,
-                "langue": langue,
-            }
-        )
-        with open("./data.json", "r") as file:
-            data = json.load(file)
-
-            data["matieres"] = Matiere.matieres
-
-        with open("./data.json", "w") as file:
-            json.dump(data, file, indent=2)
-
-    # to delete a specific matiere using the idMatiere
-    def supprimerMatiere(idMatiere):
-        with open("./data.json", "r") as file:
-            ar = json.load(file)["matieres"]
-            for i in ar:
-                if i["idMatiere"] == idMatiere:
-                    ar.remove(i)
-        with open("./data.json", "r") as file:
-            data = json.load(file)
-        data["matieres"] = ar
-
-        with open("./data.json", "w") as file:
-            json.dump(data, file, indent=2)
-
-    # to add a matiere to the matieres list
     @classmethod
     def ajouterMatiere(cls, idMatiere, libelle, langue):
-        with open("./data.json", "r") as f:
-            data = json.load(f)
-        ar = data["matieres"]
-        ar.append(
+        cls.collection.insert_one(
             {
-                "idMatiere": idMatiere,
+                "_id": idMatiere,
                 "libelle": libelle,
                 "langue": langue,
             }
         )
 
-        data["matieres"] = ar
-        with open("./data.json", "w") as f:
-            json.dump(data, f, indent=2)
-
-    # to modify the matiere
     @classmethod
-    def mofidierMatiere(cls, idMatiere, newIdMatiere, newLibelle, newLangue):
-        allSea = []
-        with open("./data.json", "r") as file:
-            arS = json.load(file)["seances"]
-        for i in arS:
-            if i["matiere"] == idMatiere:
-                allSea.append(i)
+    def mofidierMatiere(cls, idMatiere, newLibelle, newLangue):
+        cls.collection.update_one(
+            {"_id": idMatiere},
+            {
+                "$set": {
+                    "libelle": newLibelle,
+                    "langue": newLangue,
+                }
+            },
+            0.0,
+        )
 
-        with open("./data.json", "r") as file:
-            ar = json.load(file)["matieres"]
-        for i in ar:
-            if i["idMatiere"] == idMatiere:
-                i["idMatiere"] = newIdMatiere
-                i["libelle"] = newLibelle
-                i["langue"] = newLangue
+    @classmethod
+    def getAllMatieres(cls):
+        # Retrieve all matieres from MongoDB
+        return list(cls.collection.find({}))
 
-        with open("./data.json", "r") as file:
-            data = json.load(file)
-            data["matieres"] = ar
-        with open("./data.json", "w") as file:
-            json.dump(data, file, indent=2)
-
-        for i in allSea:
-            Seance.modifierSeance(
-                i["idSeance"],
-                i["idSeance"],
-                {
-                    "nom": "any",
-                    "prenom": "any",
-                    "cin": "any",
-                    "filiere": "any",
-                    "matricule": i["professeur"],
-                },
-                {
-                    "idMatiere": newIdMatiere,
-                    "libelle": "any",
-                    "langue": "any",
-                },
-                {"idSalle": i["salle"], "libelle": "any", "numero": "any"},
-                i["dateSeance"],
-            )
-
-    # the getters and the setters
     @property
     def idMatiere(self):
         return self.__idMatiere
@@ -126,8 +65,7 @@ class Matiere:
 
     @langue.setter
     def langue(self, value):
-        self.__libelle = value
+        self.__langue = value
 
-    # the method to return a string about the object
     def __str__(self):
         return f"La matiere de l'id {self.idMatiere} de libelle {self.libelle}, et de langue {self.langue}"

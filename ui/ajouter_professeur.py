@@ -1,9 +1,11 @@
-import json
 import customtkinter as ctk
-
+from pymongo import *
 from classes.professeur import Professeur
 
 ctk.set_appearance_mode("light")
+client = MongoClient("mongodb://localhost:27017/")
+db = client["center-formation"]
+collection = db["professeurs"]
 
 
 class AjouterProfesseur(ctk.CTk):
@@ -31,7 +33,7 @@ class AjouterProfesseur(ctk.CTk):
         prenom = value_prenom.get()
         filiere = value_filiere.get()
         cin = value_cin.get()
-        matricule = value_matricule.get()
+        id = value_id.get()
         final = []
 
         # for the nom
@@ -67,16 +69,16 @@ class AjouterProfesseur(ctk.CTk):
             error_cin.place_forget()
             final.append(cin)
 
-        # for the matricule
+        # for the id
 
-        if matricule == "":
-            error_matricule.place(x=330, y=415)
-        elif matricule in [i["matricule"] for i in self.get_data_from_json()]:
-            error_matricule.configure(text="always exists")
-            error_matricule.place(x=345, y=415)
+        if id == "":
+            error_id.place(x=330, y=415)
+        elif id in [i["_id"] for i in self.get_data_from_json()]:
+            error_id.configure(text="always exists")
+            error_id.place(x=345, y=415)
         else:
-            error_matricule.place_forget()
-            final.append(matricule)
+            error_id.place_forget()
+            final.append(id)
 
         if len(final) != 0:
             Professeur.ajouterProfesseur(
@@ -199,33 +201,33 @@ class AjouterProfesseur(ctk.CTk):
         label_filiere.place(x=30, y=300)
         entry_filiere.pack(pady=20)
 
-        # for the matricule
+        # for the id
 
-        label_matricule = ctk.CTkLabel(
-            frame, text="Matricule:", font=(self.font, 17), text_color=self.color
+        label_id = ctk.CTkLabel(
+            frame, text="id:", font=(self.font, 17), text_color=self.color
         )
-        global value_matricule
-        value_matricule = ctk.StringVar()
-        entry_matricule = ctk.CTkEntry(
+        global value_id
+        value_id = ctk.StringVar()
+        entry_id = ctk.CTkEntry(
             frame,
-            textvariable=value_matricule,
+            textvariable=value_id,
             height=38,
             width=400,
             border_width=0,
             font=(self.font, 13),
             text_color=self.color,
         )
-        global error_matricule
-        error_matricule = ctk.CTkLabel(
+        global error_id
+        error_id = ctk.CTkLabel(
             frame,
             text="cannot be empty",
             text_color="#FF0033",
             font=(self.font, 11),
             height=5,
         )
-        # error_matricule.place(x=330, y=415)
-        label_matricule.place(x=30, y=400)
-        entry_matricule.pack(pady=40)
+        # error_id.place(x=330, y=415)
+        label_id.place(x=30, y=400)
+        entry_id.pack(pady=40)
 
         # for the button
 
@@ -243,8 +245,7 @@ class AjouterProfesseur(ctk.CTk):
         ajouter_button.configure(cursor="hand2")
 
     def get_data_from_json(self):
-        with open("./data.json", "r") as f:
-            return json.load(f)["professeurs"]
+        return list(collection.find())
 
 
 # AjouterProfesseur().mainloop()
