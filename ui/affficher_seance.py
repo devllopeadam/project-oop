@@ -2,9 +2,14 @@ import json
 import customtkinter as ctk
 from tkinter import ttk
 from classes.seance import Seance
+from pymongo import *
 
 ctk.set_appearance_mode("light")
-
+client = MongoClient("mongodb://localhost:27017/")
+db = client["center-formation"]
+collection = db["seances"]
+salleCollection = db["salles"]
+profCollection = db["professeurs"]
 
 class AfficherSeance(ctk.CTk):
     font = "Verdana"
@@ -71,21 +76,21 @@ class AfficherSeance(ctk.CTk):
 
         ar = []
         for i in self.get_data_from_json():
-            i["salle"] = self.get_libelle_from_id(i["salle"])
+            i["salle_id"] = self.get_libelle_from_id(i["salle_id"])
             ar.append(i)
         for i in ar:
             table.insert(parent="", index="end", values=list(i.values()))
 
     def get_data_entry_check(self):
         value = value_entry_del.get()
-        aridSeance = [i["idSeance"] for i in self.get_data_from_json()]
+        aridSeance = [i["idSeance"] for i in list(profCollection.find())]
         if value in aridSeance:
             Seance.supprimerSeance(value)
             error.place_forget()
             table.delete(*table.get_children())
             ar = []
             for i in self.get_data_from_json():
-                i["salle"] = self.get_libelle_from_id(i["salle"])
+                i["salle_id"] = self.get_libelle_from_id(i["salle_id"])
                 ar.append(i)
             for i in ar:
                 table.insert(parent="", index="end", values=list(i.values()))
@@ -94,19 +99,19 @@ class AfficherSeance(ctk.CTk):
 
     def modification(self):
         final = []
-        aridSeance = [i["idSeance"] for i in self.get_data_from_json()]
+        aridSeance = [i["_id"] for i in self.get_data_from_json()]
         arI = []
         for i in self.get_data_from_json():
-            if i["idSeance"] != value_entry_mod.get():
-                arI.append(i["idSeance"])
+            if i["_id"] != value_entry_mod.get():
+                arI.append(i["_id"])
         newId = value_entry_idSeance.get()
         newPro = value_entry_professeur.get()
         newMatiere = value_entry_matiere.get()
         newSalle = value_entry_salle.get()
         newDate = value_entry_date.get()
-        sals = [i["idSalle"] for i in self.get_data("salles")]
-        mats = [i["idMatiere"] for i in self.get_data("matieres")]
-        pro = [i["matricule"] for i in self.get_data("professeurs")]
+        sals = [i["salle_id"] for i in self.get_data("salles")]
+        mats = [i["matiere_id"] for i in self.get_data("matieres")]
+        pro = [i["prof_id"] for i in self.get_data("professeurs")]
 
         if value_entry_mod.get() in aridSeance:
             error_mod.place_forget()
@@ -179,7 +184,7 @@ class AfficherSeance(ctk.CTk):
                 table.delete(*table.get_children())
                 ar = []
                 for i in self.get_data_from_json():
-                    i["salle"] = self.get_libelle_from_id(i["salle"])
+                    i["salle_id"] = self.get_libelle_from_id(i["salle_id"])
                     ar.append(i)
                 for i in ar:
                     table.insert(parent="", index="end", values=list(i.values()))
@@ -208,7 +213,6 @@ class AfficherSeance(ctk.CTk):
             command=lambda: self.get_data_entry_check(),
         )
         del_button.configure(cursor="hand2")
-        del_button.pack(pady=20)
         global value_entry_del
         value_entry_del = ctk.StringVar()
         entry_del = ctk.CTkEntry(
@@ -220,6 +224,8 @@ class AfficherSeance(ctk.CTk):
             textvariable=value_entry_del,
         )
         entry_del.pack(pady=20)
+        del_button.pack(pady=20)
+
         entry_del.insert(ctk.END, "Entrer id seance")
         global error
         error = ctk.CTkLabel(
@@ -261,7 +267,7 @@ class AfficherSeance(ctk.CTk):
             font=(self.font, 11),
         )
 
-        modi_button.pack(pady=20)
+        # modi_button.pack(pady=20)
         error_mod.place_forget()
         entry_mod.insert(ctk.END, "Entrer id seance")
         entry_mod.pack(pady=20)
@@ -380,6 +386,7 @@ class AfficherSeance(ctk.CTk):
         )
         error_date.place_forget()
         entry_date.pack(pady=10)
+        modi_button.pack(pady=20)
 
     def create_filter_bar(self):
         frame_bar = ctk.CTkFrame(
@@ -428,31 +435,36 @@ class AfficherSeance(ctk.CTk):
 
     def get_data_filter(self):
         value = value_entry_filter.get()
-        pro = [i["professeur"] for i in self.get_data_from_json()]
+        pro = [i["prof_id"] for i in self.get_data_from_json()]
         if value == "Entrer votre matricule" or value == "" or value not in pro:
             error_filter.place(x=425, anchor="center", y=20)
             table.delete(*table.get_children())
+            ar = []
             for i in self.get_data_from_json():
+                i["salle_id"] = self.get_libelle_from_id(i["salle_id"])
+                ar.append(i)
+            for i in ar:
                 table.insert(parent="", index="end", values=list(i.values()))
         elif value in pro:
             table.delete(*table.get_children())
+            ar = []
             for i in Seance.afficherSeanceProfesseur(value):
+                i["salle_id"] = self.get_libelle_from_id(i["salle_id"])
+                ar.append(i)
+            for i in ar:
                 table.insert(parent="", index="end", values=list(i.values()))
             error_filter.place_forget()
 
     def get_data(self, value):
-        with open("./data.json", "r") as f:
-            return json.load(f)[value]
+        colt = db[value]
+        return list(colt.find())
 
     def get_data_from_json(self):
-        with open("./data.json", "r") as f:
-            return json.load(f)["seances"]
+        return list(collection.find())
 
     def get_libelle_from_id(self, id):
-        with open("./data.json", "r") as f:
-            data = json.load(f)["salles"]
-        for i in data:
-            if i["idSalle"] == id:
+        for i in list(salleCollection.find()):
+            if i["_id"] == id:
                 return i["libelle"]
 
 

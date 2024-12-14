@@ -71,9 +71,11 @@ class AjouterUtilisateur(ctk.CTk):
             error_email.place_forget()
             final.append(email)
 
+        from acceuil import Home
+
         Utilisateur.ajouterUtilisateur(final[0], final[1], final[2])
         self.destroy()
-
+        Home().mainloop()
     def create_entries_frame(self):
         frame = ctk.CTkFrame(self, width=450, height=500, fg_color="#F1F1F1")
         frame.pack(pady=20, ipadx=30, ipady=20)

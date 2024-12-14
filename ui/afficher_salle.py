@@ -1,4 +1,3 @@
-import json
 import customtkinter as ctk
 from tkinter import ttk
 from pymongo import *

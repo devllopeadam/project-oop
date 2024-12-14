@@ -1,4 +1,4 @@
-import json
+from datetime import datetime
 import customtkinter as ctk
 from pymongo import *
 
@@ -7,7 +7,7 @@ ctk.set_appearance_mode("light")
 from classes.seance import Seance
 client = MongoClient("mongodb://localhost:27017/")
 db = client["center-formation"]
-collection = db["utilisateurs"]
+collection = db["seances"]
 
 class AjouterSeance(ctk.CTk):
     font = "Verdana"
@@ -29,78 +29,110 @@ class AjouterSeance(ctk.CTk):
         title_window.pack(pady=20)
         self.create_entries_frame()
 
+    from datetime import datetime
+
     def check_ajouter(self):
-        ids = [i["idSeance"] for i in self.get_data_from_json()]
-        with open("./data.json", "r") as f:
-            dataP = json.load(f)["professeurs"]
-        proM = [i["matricule"] for i in dataP]
-        with open("./data.json", "r") as f:
-            dataM = json.load(f)["matieres"]
-        matM = [i["idMatiere"] for i in dataM]
-        with open("./data.json", "r") as f:
-            dataS = json.load(f)["salles"]
-        salM = [i["idSalle"] for i in dataS]
-        final = []
-        # for the id seance
-        if value_id.get() == "":
-            error_id.place(x=330, y=23)
-        elif value_id.get() in ids:
-            error_id.configure(text="always exist")
-            error_id.place(x=350, y=23)
-        else:
-            error_id.place_forget()
-            final.append(value_id.get())
+        try:
+            # Fetch data for validation
+            ids = [i["_id"] for i in self.get_data_from_json()]
+            proM = [i["_id"] for i in self.get_data("professeurs")]
+            matM = [i["_id"] for i in self.get_data("matieres")]
+            salM = [i["_id"] for i in self.get_data("salles")]
+            final = []
 
-        # for the professeur
-        if value_professeur.get() == "":
-            error_professeur.place(x=330, y=123)
-        elif value_professeur.get() not in proM:
-            error_professeur.configure(text="is not exist")
-            error_professeur.place(x=350, y=23)
-        else:
-            error_professeur.place_forget()
-            for i in dataP:
-                if i["matricule"] == value_professeur.get():
-                    final.append(i)
+            # Validate Seance ID
+            if value_id.get().strip() == "":
+                error_id.configure(text="ID cannot be empty")
+                error_id.place(x=330, y=23)
+                return
+            elif value_id.get().strip() in ids:
+                error_id.configure(text="ID already exists")
+                error_id.place(x=350, y=23)
+                return
+            else:
+                error_id.place_forget()
+                final.append(value_id.get().strip())
 
-        # for the matiere id
+            # Validate Professeur
+            if value_professeur.get().strip() == "":
+                error_professeur.configure(text="Professeur cannot be empty")
+                error_professeur.place(x=330, y=123)
+                return
+            elif value_professeur.get().strip() not in proM:
+                error_professeur.configure(text="Professeur does not exist")
+                error_professeur.place(x=350, y=123)
+                return
+            else:
+                error_professeur.place_forget()
+                final.append(value_professeur.get().strip())
 
-        if value_matiere.get() == "":
-            error_matiere.place(x=330, y=223)
-        elif value_matiere.get() not in matM:
-            error_matiere.configure(text="is not exist")
-            error_matiere.place(x=355, y=223)
-        else:
-            error_matiere.place_forget()
-            for i in dataM:
-                if i["idMatiere"] == value_matiere.get():
-                    final.append(i)
+            # Validate Matiere
+            if value_matiere.get().strip() == "":
+                error_matiere.configure(text="Matiere cannot be empty")
+                error_matiere.place(x=330, y=223)
+                return
+            elif value_matiere.get().strip() not in matM:
+                error_matiere.configure(text="Matiere does not exist")
+                error_matiere.place(x=355, y=223)
+                return
+            else:
+                error_matiere.place_forget()
+                final.append(value_matiere.get().strip())
 
-        if value_salle.get() == "":
-            error_salle.place(x=330, y=323)
-        elif value_salle.get() not in salM:
-            error_salle.configure(text="is not exist")
-            error_salle.place(x=355, y=323)
-        else:
-            error_salle.place_forget()
-            for i in dataS:
-                if i["idSalle"] == value_salle.get():
-                    final.append(i)
+            # Validate Salle
+            if value_salle.get().strip() == "":
+                error_salle.configure(text="Salle cannot be empty")
+                error_salle.place(x=330, y=323)
+                return
+            elif value_salle.get().strip() not in salM:
+                error_salle.configure(text="Salle does not exist")
+                error_salle.place(x=355, y=323)
+                return
+            else:
+                error_salle.place_forget()
+                final.append(value_salle.get().strip())
 
-        # for the date
-        state = Seance.afficherSalleDispo(value_salle.get(), value_date.get())
+            # Validate Date
+            if value_date.get().strip() == "":
+                error_date.configure(text="Date cannot be empty")
+                error_date.place(x=330, y=420)
+                return
 
-        if value_date.get() == "":
-            error_date.place(x=330, y=420)
-        elif state == True:
-            # for update please
-            error_date.configure("date not dispo")
-            error_date.place(x=330, y=420)
-        else:
-            error_date.place_forget()
-            final.append(value_date.get())
+            try:
+                # Format the date
+                formatted_date = datetime.strptime(
+                    value_date.get().strip(), "%d/%m/%Y"
+                ).strftime("%Y-%m-%d")
+            except ValueError:
+                error_date.configure(text="Invalid date format. Use DD/MM/YYYY.")
+                error_date.place(x=320, y=420)
+                return
 
-        Seance.ajouterSeance(final[0], final[1], final[2], final[3], final[4])
+            # Check Salle availability on the given Date
+            print(
+                f"Checking salle availability: Salle = {value_salle.get()}, Date = {formatted_date}"
+            )
+            state = Seance.afficherSalleDispo(value_salle.get(), formatted_date)
+            if not state:  # Room is not available
+                error_date.configure(text="Salle not available on this date")
+                error_date.place(x=330, y=420)
+                return
+            else:
+                error_date.place_forget()
+                final.append(formatted_date)
+
+            # Debug: Log final data
+            print("Final Data to Add:", final)
+
+            # Add the Seance
+            Seance.ajouterSeance(final[0], final[1], final[2], final[3], final[4])
+            from acceuil import Home
+
+            print("Seance added successfully!")
+            self.destroy()
+            Home().mainloop()
+        except Exception as e:
+            print("Error in check_ajouter:", e)
 
     def create_entries_frame(self):
         frame = ctk.CTkFrame(self, width=450, height=450, fg_color="#F1F1F1")
@@ -268,8 +300,9 @@ class AjouterSeance(ctk.CTk):
         ajouter_button.pack()
         ajouter_button.configure(cursor="hand2")
 
+    def get_data(self, value):
+        colt = db[value]
+        return list(colt.find())
+
     def get_data_from_json(self):
         return list(collection.find())
-
-
-# AjouterSeance().mainloop()

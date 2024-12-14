@@ -81,9 +81,13 @@ class AjouterProfesseur(ctk.CTk):
             final.append(id)
 
         if len(final) != 0:
+            from acceuil import Home
+
             Professeur.ajouterProfesseur(
                 final[0], final[1], final[2], final[3], final[4]
             )
+            self.destroy()
+            Home().mainloop()
 
     def create_entries_frame(self):
         frame = ctk.CTkFrame(self, width=450, height=450, fg_color="#F1F1F1")

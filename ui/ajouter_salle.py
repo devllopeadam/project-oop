@@ -57,8 +57,11 @@ class AjouterSalle(ctk.CTk):
             final.append(value_numero.get())
 
         if len(final) != 0:
+            from acceuil import Home
+
             Salle.ajouterSalle(final[0], final[1], final[2])
             self.destroy()
+            Home().mainloop()
 
     def create_entries_frame(self):
         frame = ctk.CTkFrame(self, width=450, height=450, fg_color="#F1F1F1")
